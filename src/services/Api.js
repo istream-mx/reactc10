@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {API_KEY, API_URL} from '../environments';
+import {API_KEY, API_URL, TENANT} from '../environments';
 
 export function getAxiosInstance({baseURL = null, token = null} = {}) {
   const axiosInstance = axios.create({
@@ -9,6 +9,7 @@ export function getAxiosInstance({baseURL = null, token = null} = {}) {
       'Content-type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'api-key': API_KEY,
+      tenant: TENANT,
       ...(!!token && {Authorization: `Bearer ${token}`}),
     },
   });

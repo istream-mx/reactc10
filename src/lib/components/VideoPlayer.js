@@ -4,6 +4,7 @@ import {Dimensions, StyleSheet} from 'react-native';
 import * as React from 'react';
 
 export const VideoPlayer = props => {
+  const {url = ''} = props;
   const videoRef = React.useRef(null);
   const [width, setwidth] = React.useState(0);
   const [height, setheight] = React.useState(0);
@@ -25,7 +26,7 @@ export const VideoPlayer = props => {
   return (
     <Video
       source={{
-        uri: 'http://stream2.dynalias.com:1935/live/tvlive1/playlist.m3u8?DVR',
+        uri: url,
       }} // the video file
       paused={false} // make it start
       repeat={false}

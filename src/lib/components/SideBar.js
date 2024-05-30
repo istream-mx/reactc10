@@ -10,10 +10,20 @@ import {
 import {TvIcon} from 'lucide-react-native';
 import * as React from 'react';
 import {Linking, Pressable, TouchableHighlight} from 'react-native';
+import {useDispatch, useSelector} from 'react-redux';
+import {setSideBarCurrent} from '../../app/reducers/sideBarPathStore';
 
 export const SideBar = ({navigation}) => {
+  const currentPath = useSelector(
+    state => state.sideBarPathStore.sideBarPathCurrent,
+  );
+  const dispatch = useDispatch();
+
   const navigateTo = (routeName, params = {}) => {
-    navigation.navigate(routeName, params);
+    if (routeName !== currentPath) {
+      navigation.navigate(routeName, params);
+      dispatch(setSideBarCurrent(routeName));
+    }
   };
   return (
     <VStack flex={1} style={{backgroundColor: 'rgba(0,0,0,0.6)'}} space="xl">
@@ -26,13 +36,14 @@ export const SideBar = ({navigation}) => {
         />
       </VStack>
       <ScrollView paddingVertical={20}>
-        <Box backgroundColor="#c80000">
-          <TouchableHighlight
-            onPress={() => navigateTo('LiveStreamModal')}
-            underlayColor={'#c80000'}>
+        <Box
+          backgroundColor={
+            currentPath === 'LiveStreamModal' ? '#c80000' : 'transparent'
+          }>
+          <TouchableHighlight onPress={() => navigateTo('LiveStreamModal')}>
             <HStack space="lg" padding={'$3'}>
               <Icon as={TvIcon} color="$white" alignSelf="center" p="$3" />
-              <Text color="$white" size="md" bold>
+              <Text color="$white" size="md" >
                 {'Ver TV en Vivo'}
               </Text>
             </HStack>
@@ -86,7 +97,7 @@ const SocialMediaButton = props => {
       case 'tw':
         return Linking.openURL('https://twitter.com/Tucanal10');
       case 'phone':
-        return Linking.openURL(`tel://${'+529988436500 '}`);
+        return Linking.openURL(`tel://${'529988436500 '}`);
       default:
         break;
     }
@@ -95,7 +106,7 @@ const SocialMediaButton = props => {
   return (
     <Box paddingHorizontal={'$3'}>
       <Pressable onPress={() => onPressSocialMedia()}>
-        <Image source={urlByTypeSocialMedia()} alt={type} size="xs" />
+        <Image source={urlByTypeSocialMedia()} alt={type} size="2xs" />
       </Pressable>
     </Box>
   );

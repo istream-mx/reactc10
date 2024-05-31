@@ -67,6 +67,10 @@ def enableProguardInReleaseBuilds = false
  * this variant is about 6MiB larger per architecture than default.
  */
 def jscFlavor = 'org.webkit:android-jsc:+'
+def _applicationId = System.getenv("GRADLE_APP_IDENTIFIER") ?: 'com.reactnativeapp'
+def _appName = System.getenv("GRADLE_APP_NAME") ?: 'reactNativeApp debug'
+def _versionCode = (System.getenv("ANDROID_VERSION_CODE") ?: "1") as Integer
+def _versionName = System.getenv("ANDROID_VERSION_NAME") ?: "1.0.0"
 
 android {
     ndkVersion rootProject.ext.ndkVersion
@@ -75,11 +79,14 @@ android {
 
     namespace "com.reactnativeapp"
     defaultConfig {
-        applicationId "com.reactnativeapp"
+        applicationId _applicationId
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode _versionCode
+        versionName _versionName
+        resValue "string", "build_config_package", _applicationId
+        resValue "string", "APP_NAME", _appName
+        setProperty("archivesBaseName", "${applicationId}-${versionName}")
     }
     signingConfigs {
         debug {

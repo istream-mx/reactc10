@@ -32,7 +32,6 @@ local.properties
 *.hprof
 .cxx/
 *.keystore
-*.json
 !debug.keystore
 
 # node.js
@@ -52,6 +51,9 @@ yarn-error.log
 **/fastlane/Preview.html
 **/fastlane/screenshots
 **/fastlane/test_output
+**/fastlane/.env.*.secret
+**/fastlane/api-*.json
+**/fastlane/AuthKey_*.p8
 
 # Bundle artifact
 *.jsbundle
@@ -65,3 +67,4 @@ yarn-error.log
 
 # testing
 /coverage
+android/app/google-services.json

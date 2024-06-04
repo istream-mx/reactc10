@@ -8,6 +8,8 @@
     "lint": "eslint .",
     "start": "GLUESTACK_STYLE_TARGET=native react-native start",
     "test": "jest",
+    "pack-secrets": "./secrets-scripts/pack-secrets.sh",
+    "unpack-secrets": "./secrets-scripts/unpack-secrets.sh",
     "deploy": "GLUESTACK_STYLE_TARGET=native ./deploy.sh"
   },
   "dependencies": {

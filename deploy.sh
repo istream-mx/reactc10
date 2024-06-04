@@ -55,7 +55,7 @@ while getopts ":e:o:t:d:m:" opt; do
   esac
 done
 
-[[ -z $(git status -s) ]] || warn 'Please make sure you deploy with no changes or untracked files. You can run *git stash --include-untracked*.'
+# [[ -z $(git status -s) ]] || warn 'Please make sure you deploy with no changes or untracked files. You can run *git stash --include-untracked*.'
 
 source fastlane/.env.$APP_ENV
 

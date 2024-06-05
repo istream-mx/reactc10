@@ -48,6 +48,7 @@ export const liveStreamStore = createSlice({
     liveStreamCurrent: {},
     liveStreams: [],
     scheduleEvents: [],
+    isFullScreenVideoPlayer: false,
   },
   reducers: {
     setLiveStreamCurrent: (state, action) => {
@@ -59,11 +60,18 @@ export const liveStreamStore = createSlice({
     setScheduleEvents: (state, action) => {
       state.scheduleEvents = action.payload;
     },
+    setIsFullScreenVideoPlayer: (state, action) => {
+      state.isFullScreenVideoPlayer = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const {setLiveStreamCurrent, setLiveStreams, setScheduleEvents} =
-  liveStreamStore.actions;
+export const {
+  setLiveStreamCurrent,
+  setLiveStreams,
+  setScheduleEvents,
+  setIsFullScreenVideoPlayer,
+} = liveStreamStore.actions;
 
 export default liveStreamStore.reducer;

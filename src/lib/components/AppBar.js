@@ -12,7 +12,7 @@ export const AppBar = props => {
       justifyContent="space-between"
       alignItems="center"
       px="$2"
-      py="$1"
+      paddingTop="$3"
       bgColor="#c80000"
       space="sm">
       <StatusBar backgroundColor={'#c80000'} barStyle="light-content" />

@@ -6,7 +6,7 @@ import rootReducer from './reducers/index';
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['sideBarPathStore', 'liveStreamStore'],
+  blacklist: ['sideBarPathStore', 'liveStreamStore', 'updateInfoStore'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -44,6 +44,8 @@ target 'reactNativeApp' do
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
+  
+  pod 'react-native-version-check', :path => '../node_modules/react-native-version-check'
 
   target 'reactNativeAppTests' do
     inherit! :complete

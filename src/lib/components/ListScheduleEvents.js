@@ -49,7 +49,7 @@ export const ListScheduleEvents = props => {
         <HStack justifyContent="center" flex={1}>
           <VStack alignItems="center">
             <Text bold size="md">
-              {'Estas Viendo...'}
+              {'Estás Viendo...'}
             </Text>
             {firstItem?.schedule_event?.name && (
               <Text size="md">{firstItem.schedule_event.name}</Text>

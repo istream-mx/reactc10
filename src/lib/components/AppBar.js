@@ -12,10 +12,10 @@ export const AppBar = props => {
       justifyContent="space-between"
       alignItems="center"
       px="$2"
-      py="$1"
+      paddingTop="$3"
       bgColor="#c80000"
       space="sm">
-      <StatusBar backgroundColor={'#c80000'} />
+      <StatusBar backgroundColor={'#c80000'} barStyle="light-content" />
       <Button onPress={() => navigation.openDrawer()} variant="link" size="xl">
         <ButtonIcon as={MenuIcon} color="$white" size="xl" />
       </Button>

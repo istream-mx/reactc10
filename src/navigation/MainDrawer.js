@@ -12,6 +12,7 @@ const MainDrawer = ({navigation}) => {
         drawerStyle: {
           backgroundColor: 'transparent',
         },
+        drawerType: 'front'
       }}
       drawerContent={_props => <SideBar navigation={navigation} />}>
       <Drawer.Screen

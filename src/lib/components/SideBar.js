@@ -7,16 +7,24 @@ import {
   Text,
   VStack,
 } from '@gluestack-ui/themed';
-import {TvIcon} from 'lucide-react-native';
+import {
+  DotSquare,
+  DotSquareIcon,
+  MoreHorizontalIcon,
+  TvIcon,
+} from 'lucide-react-native';
 import * as React from 'react';
 import {Linking, Pressable, TouchableHighlight} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {setSideBarCurrent} from '../../app/reducers/sideBarPathStore';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export const SideBar = ({navigation}) => {
   const currentPath = useSelector(
     state => state.sideBarPathStore.sideBarPathCurrent,
   );
+  const insets = useSafeAreaInsets();
+
   const dispatch = useDispatch();
 
   const navigateTo = (routeName, params = {}) => {
@@ -26,8 +34,16 @@ export const SideBar = ({navigation}) => {
     }
   };
   return (
-    <VStack flex={1} style={{backgroundColor: 'rgba(0,0,0,0.6)'}} space="xl">
-      <VStack alignItems="center" borderBottomColor="$white" borderWidth={1}>
+    <VStack
+      flex={1}
+      style={{backgroundColor: 'rgba(0,0,0,0.6)'}}
+      space="xl"
+      py={insets.bottom || '$4'}
+      pt={insets.top || '$2.5'}>
+      <VStack
+        alignItems="center"
+        borderBottomColor="$white"
+        borderBottomWidth={1}>
         <Image
           padding={'$16'}
           source={require('../../ui-images/Logo_app.png')}
@@ -43,8 +59,26 @@ export const SideBar = ({navigation}) => {
           <TouchableHighlight onPress={() => navigateTo('LiveStreamModal')}>
             <HStack space="lg" padding={'$3'}>
               <Icon as={TvIcon} color="$white" alignSelf="center" p="$3" />
-              <Text color="$white" size="md" >
+              <Text color="$white" size="md">
                 {'Ver TV en Vivo'}
+              </Text>
+            </HStack>
+          </TouchableHighlight>
+        </Box>
+        <Box
+          backgroundColor={
+            currentPath === 'MoreDetailsScreen' ? '#c80000' : 'transparent'
+          }>
+          <TouchableHighlight onPress={() => navigateTo('MoreDetailsScreen')}>
+            <HStack space="lg" padding={'$3'}>
+              <Icon
+                as={MoreHorizontalIcon}
+                color="$white"
+                alignSelf="center"
+                p="$3"
+              />
+              <Text color="$white" size="md">
+                {'Más+'}
               </Text>
             </HStack>
           </TouchableHighlight>
@@ -53,7 +87,7 @@ export const SideBar = ({navigation}) => {
       <VStack
         alignItems="center"
         borderTopColor="$white"
-        borderWidth={1}
+        borderTopWidth={1}
         space="md"
         paddingVertical={'$3'}>
         <Text color="$white" size="md">

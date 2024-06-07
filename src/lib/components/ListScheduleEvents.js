@@ -9,9 +9,11 @@ import {
 } from '@gluestack-ui/themed';
 import moment from 'moment';
 import * as React from 'react';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export const ListScheduleEvents = props => {
   const {scheduleEvents = []} = props;
+  const insets = useSafeAreaInsets();
 
   const firstItem = React.useMemo(() => {
     if (scheduleEvents.length > 0) {
@@ -39,7 +41,7 @@ export const ListScheduleEvents = props => {
   };
 
   return (
-    <Box flex={1}>
+    <Box flex={1} paddingBottom={insets.bottom || '$4'}>
       <HStack space="md" paddingHorizontal={'$3'} paddingVertical={2}>
         <Image
           source={require('../../ui-images/Logo_app.png')}

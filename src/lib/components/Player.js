@@ -5,20 +5,28 @@ import VideoPlayer from 'react-native-video-controls';
 import * as React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {setIsFullScreenVideoPlayer} from '../../app/reducers/liveStreamStore';
+import {useIsFocused} from '@react-navigation/native';
 
 export const Player = props => {
   const {url = ''} = props;
   const videoRef = React.useRef(null);
-  const [width, setwidth] = React.useState(0);
-  const [height, setheight] = React.useState(0);
+  // const [width, setwidth] = React.useState(0);
+  const [paused, setPaused] = React.useState(true);
   const isFullScreenVideoPlayer = useSelector(
     state => state.liveStreamStore.isFullScreenVideoPlayer,
   );
   const dispatch = useDispatch();
+  const isFocused = useIsFocused();
 
-  // React.useEffect(() => {
-  //   setheight(Dimensions.get('window').height);
-  // }, []);
+  React.useEffect(() => {
+    if (isFocused) {
+      setPaused(false);
+      // videoRef.current.player.ref.pause();
+    } else {
+      setPaused(true);
+      // videoRef.current.player.ref.pause();
+    }
+  }, [isFocused]);
 
   // React.useEffect(() => {
   //   Dimensions.addEventListener('change', ({window: {width, height}}) => {
@@ -49,7 +57,7 @@ export const Player = props => {
       source={{
         uri: url,
       }} // the video file
-      paused={false} // make it start
+      paused={paused} // make it start
       repeat={false}
       controls={false}
       ref={videoRef}

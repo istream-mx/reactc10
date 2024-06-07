@@ -112,7 +112,7 @@ platform :ios do
         plist['CFBundleDisplayName'] = ENV['IOS_APP_NAME']
         plist['CFBundleShortVersionString'] = ENV['IOS_VERSION']
         plist['CFBundleVersion'] = ENV['IOS_VERSION_BUILD_NUMBER']
-        urlScheme = plist["CFBundleURLTypes"].find{|scheme| scheme["CFBundleURLSchemes"]}
+        # urlScheme = plist["CFBundleURLTypes"].find{|scheme| scheme["CFBundleURLSchemes"]}
       },
     )
     if ENV['IOS_APPCENTER_APP_SECRET'] then
@@ -148,9 +148,19 @@ platform :ios do
     )
   end
 
+  lane :connect_api_key do |options|
+    app_store_connect_api_key(
+      key_id: ENV["APPSTORE_API_KEY_ID"],
+      issuer_id: ENV["APPSTORE_ISSUER_ID"],
+      key_filepath: ENV["APPSTORE_KEY_FILEPATH"],
+      duration: 1200, # optional (maximum 1200)
+      in_house: false # optional but may be required if using match/sigh
+    )
+  end
+
   lane :deploy_to_testflight do |options|
     pilot(
-      username: ENV['IOS_APPSTORECONNECT_USER_ID'],
+      username: ENV['IOS_USER_ID'],
       app_identifier: ENV['IOS_APP_ID'],
       ipa: ENV['IOS_IPA_PATH'],
       distribute_external: false,

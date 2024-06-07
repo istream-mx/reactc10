@@ -29,7 +29,7 @@ done
 FILE_ROOT="${APP_ENV}_app_secrets_with_paths"
 
 # Select files to put in the archive
-SECRETS_TO_PACK="fastlane/.env.${APP_ENV}.secret android/app/${GRADLE_KEYSTORE} ${ANDROID_PLAYSTORE_JSON_KEY_PATH} android/app/google-services.json" 
+SECRETS_TO_PACK="fastlane/.env.${APP_ENV}.secret android/app/${GRADLE_KEYSTORE} ${ANDROID_PLAYSTORE_JSON_KEY_PATH} ${APPSTORE_KEY_FILEPATH} android/app/google-services.json" 
 
 # Create archive
 tar -cvzf $FILE_ROOT.tar.gz $SECRETS_TO_PACK

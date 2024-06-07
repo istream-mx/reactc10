@@ -82,6 +82,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
+### ios connect_api_key
+
+```sh
+[bundle exec] fastlane ios connect_api_key
+```
+
+
+
 ### ios deploy_to_testflight
 
 ```sh

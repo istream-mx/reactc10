@@ -3,6 +3,7 @@ import {Linking, StatusBar} from 'react-native';
 import {Button, ButtonText, HStack, Image, VStack} from '@gluestack-ui/themed';
 import {Text} from '@gluestack-ui/themed';
 import {Box} from '@gluestack-ui/themed';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export const UpdateAvailableScreen = ({route}) => {
   const {
@@ -10,6 +11,7 @@ export const UpdateAvailableScreen = ({route}) => {
     latestVersion = '1.0.1',
     storeUrl = '',
   } = route.params;
+  const insets = useSafeAreaInsets();
 
   const handlePress = () => {
     Linking.openURL(storeUrl);
@@ -20,8 +22,8 @@ export const UpdateAvailableScreen = ({route}) => {
       <HStack
         justifyContent="space-between"
         alignItems="center"
-        px="$2"
-        py="$1"
+        py={insets.bottom || '$4'}
+        pt={insets.top || '$2'}
         bgColor="#c80000"
         space="sm">
         <StatusBar backgroundColor={'#c80000'} barStyle="light-content" />

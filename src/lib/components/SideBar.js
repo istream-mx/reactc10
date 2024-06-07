@@ -7,7 +7,12 @@ import {
   Text,
   VStack,
 } from '@gluestack-ui/themed';
-import {TvIcon} from 'lucide-react-native';
+import {
+  DotSquare,
+  DotSquareIcon,
+  MoreHorizontalIcon,
+  TvIcon,
+} from 'lucide-react-native';
 import * as React from 'react';
 import {Linking, Pressable, TouchableHighlight} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
@@ -56,6 +61,24 @@ export const SideBar = ({navigation}) => {
               <Icon as={TvIcon} color="$white" alignSelf="center" p="$3" />
               <Text color="$white" size="md">
                 {'Ver TV en Vivo'}
+              </Text>
+            </HStack>
+          </TouchableHighlight>
+        </Box>
+        <Box
+          backgroundColor={
+            currentPath === 'MoreDetailsScreen' ? '#c80000' : 'transparent'
+          }>
+          <TouchableHighlight onPress={() => navigateTo('MoreDetailsScreen')}>
+            <HStack space="lg" padding={'$3'}>
+              <Icon
+                as={MoreHorizontalIcon}
+                color="$white"
+                alignSelf="center"
+                p="$3"
+              />
+              <Text color="$white" size="md">
+                {'Más+'}
               </Text>
             </HStack>
           </TouchableHighlight>

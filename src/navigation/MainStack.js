@@ -9,6 +9,9 @@ import {
   setHasCheckForUpdate,
   setUpdateInfo,
 } from '../app/reducers/updateInfoStore';
+import {NewScreen} from '../screens/NewScreen';
+import { GalleryModal } from '../screens/GalleryModal';
+import { VideoModal } from '../screens/VideoModal';
 
 const Stack = createNativeStackNavigator();
 
@@ -44,6 +47,27 @@ const MainStack = () => {
         ) : (
           <Stack.Group>
             <Stack.Screen name="MainDrawer" component={MainDrawer} />
+            <Stack.Screen
+              name="NewScreen"
+              component={NewScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="GalleryModal"
+              component={GalleryModal}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="VideoModal"
+              component={VideoModal}
+              options={{
+                headerShown: false,
+              }}
+            />
           </Stack.Group>
         )}
       </Stack.Navigator>

@@ -1,5 +1,7 @@
 import {
   Box,
+  Button,
+  ButtonIcon,
   FlatList,
   HStack,
   Image,
@@ -15,6 +17,9 @@ import 'moment/locale/es';
 import {ImageNewComponent} from './ImageNew';
 import {getYoutubeMeta} from 'react-native-youtube-iframe';
 import {youtube_parser} from '../../utils/common';
+import {Share2Icon, ShareIcon} from 'lucide-react-native';
+import {Share} from 'react-native';
+import {URL_SHARE_NOTES} from '../../environments';
 
 export const CardNew = props => {
   const {item = {}, onPress = () => {}} = props;
@@ -88,6 +93,24 @@ export const CardNew = props => {
       onPress();
     }
   };
+
+  const shareNew = async () => {
+    let noteInfo = `${item.source.slug}/${item.slug_name}`;
+    try {
+      const result = await Share.share({
+        message: `${URL_SHARE_NOTES}${noteInfo}`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+        } else {
+        }
+      } else if (result.action === Share.dismissedAction) {
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <VStack
       space="sm"
@@ -124,6 +147,11 @@ export const CardNew = props => {
             paddingVertical={'$2'}>
             {formatScheduleDate(item.publish_date)}
           </Text>
+          <HStack justifyContent="flex-end" paddingHorizontal={'$4'}>
+            <Button onPress={shareNew} variant="link" size="xl">
+              <ButtonIcon as={Share2Icon} p={'$4'} color="$red700" />
+            </Button>
+          </HStack>
         </VStack>
       </Pressable>
     </VStack>

@@ -15,8 +15,6 @@ export const fetchNews = createAsyncThunk(
         filter: payload.filter,
       });
 
-      //   console.log(response);
-
       if (get(payload, 'addItems', false)) {
         thunkAPI.dispatch(setAddNewItems(response.data.data));
       } else {
@@ -25,7 +23,6 @@ export const fetchNews = createAsyncThunk(
 
       return response.data.data;
     } catch (error) {
-      //   console.log(error);
       return thunkAPI.rejectWithValue(error);
     }
   },

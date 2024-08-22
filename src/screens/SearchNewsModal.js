@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {AppBar} from '../lib/components/AppBar';
 import {
   Box,
   Text,
@@ -7,31 +6,36 @@ import {
   HStack,
   Image,
   VStack,
-  Button,
-  ButtonIcon,
+  FormControl,
+  Input,
+  InputField,
+  InputSlot,
+  InputIcon,
 } from '@gluestack-ui/themed';
 import {useDispatch, useSelector} from 'react-redux';
-import {
-  fetchNews,
-  setListNews,
-  setNewCurrentId,
-} from '../app/reducers/newStore';
+import {fetchNewsData, setNewCurrentId} from '../app/reducers/newStore';
 import {CardNew} from '../lib/components/CardNew';
+import {SingleHeader} from '../lib/components/SingleHeader';
+import {HeaderWithComponent} from '../lib/components/HeaderWithComponent';
+import debounce from 'lodash.debounce';
 import {SearchIcon} from 'lucide-react-native';
-import {ActivityIndicator, TextInput} from 'react-native';
+import {ActivityIndicator} from 'react-native';
 
-export const ListNewsScreen = ({navigation}) => {
-  const listNews = useSelector(state => state.newStore.listNews);
+export const SearchNewsModal = ({navigation}) => {
   const dispatch = useDispatch();
   const [page, setPage] = React.useState(1);
-  const [handlingData, setHandlingData] = React.useState(true);
+  const [handlingData, setHandlingData] = React.useState(false);
+  const [query, setQuery] = React.useState('');
+  const [listNews, setListNews] = React.useState([]);
 
   const fetchData = React.useCallback(
-    async (addItems, newPage) => {
+    async (addItems, newPage, title) => {
+      setHandlingData(true);
       await dispatch(
-        fetchNews({
+        fetchNewsData({
           addItems: addItems,
           filter: {
+            title: title,
             publish_movil: true,
             publish_date_movil: true,
             pagination: {
@@ -41,7 +45,8 @@ export const ListNewsScreen = ({navigation}) => {
           },
         }),
       )
-        .then(() => {
+        .then(response => {
+          setListNews(response.payload);
           setPage(newPage);
           setHandlingData(false);
         })
@@ -59,15 +64,14 @@ export const ListNewsScreen = ({navigation}) => {
       return;
     } else {
       let newPage = ++currentPage;
-      fetchData(true, newPage);
+      fetchData(true, newPage, query);
     }
   };
 
   const onRefresh = () => {
     setPage(1);
-    dispatch(setListNews([]));
-    setHandlingData(true);
-    fetchData(false, 1);
+    setListNews([]);
+    fetchData(false, 1, query);
   };
 
   const onPressTo = item => {
@@ -75,26 +79,29 @@ export const ListNewsScreen = ({navigation}) => {
     dispatch(setNewCurrentId(item.id));
   };
 
-  const onPressToSearch = item => {
-    navigation.navigate('SearchNewsModal', {});
-  };
-
   React.useEffect(() => {
-    setHandlingData(true);
-    fetchData(false, 1);
-  }, []);
+    if (query.length > 2) {
+      fetchData(false, 1, query);
+    }
+  }, [query]);
+
+  const debouncedSetAddText = debounce(setQuery, 250);
 
   return (
     <Box flex={1}>
-      <AppBar navigation={navigation} title={'Noticias'}>
-        <Button
-          variant="link"
-          size="xl"
-          onPress={onPressToSearch}
-          paddingHorizontal={'$1'}>
-          <ButtonIcon as={SearchIcon} color="$white" />
-        </Button>
-      </AppBar>
+      <HeaderWithComponent navigation={navigation}>
+        <Input backgroundColor="$white">
+          <InputSlot padding={'$1'}>
+            <InputIcon as={SearchIcon} p={'$3'} />
+          </InputSlot>
+          <InputField
+            type="text"
+            placeholder="Buscar..."
+            onChangeText={text => debouncedSetAddText(text)}
+          />
+        </Input>
+      </HeaderWithComponent>
+
       <FlatList
         data={listNews}
         onEndReached={loadMore}

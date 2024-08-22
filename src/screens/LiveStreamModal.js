@@ -38,15 +38,13 @@ export const LiveStreamModal = ({navigation}) => {
   return (
     <Box flex={1}>
       {!isFullScreenVideoPlayer ? (
-        <AppBar navigation={navigation}>
-          <Text color="$white">{'TV en Vivo'}</Text>
-        </AppBar>
+        <AppBar navigation={navigation} title={'TV en Vivo'} />
       ) : (
         <StatusBar hidden={true} />
       )}
-      {/* <VStack justifyContent="center" flex={1} backgroundColor="$black">
+      <VStack justifyContent="center" flex={1} backgroundColor="$black">
         {liveStream?.url && <Player url={liveStream.url} />}
-      </VStack> */}
+      </VStack>
       {!isFullScreenVideoPlayer && (
         <ListScheduleEvents scheduleEvents={scheduleEvents} />
       )}

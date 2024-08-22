@@ -7,4 +7,5 @@ module.exports = {
     'u9z71RaK/EoMjS+BWwCXXxTUd9nzBdSENvjsHJGKCA6lPfs6Xdr9YfcmT+oQmFo8yttSgJChddVVv8LZCu2kPA==',
   SENTRY_DSN: '',
   TENANT: 'c10',
+  URL_SHARE_NOTES: 'https://noticias.canal10.tv/nota/'
 };

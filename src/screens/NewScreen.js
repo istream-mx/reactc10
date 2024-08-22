@@ -23,20 +23,22 @@ import {get} from 'lodash';
 import moment from 'moment';
 import 'moment/locale/es';
 import RenderHtml from 'react-native-render-html';
-import {useWindowDimensions} from 'react-native';
+import {ActivityIndicator, Share, useWindowDimensions} from 'react-native';
 import {ImageNew, ImageNewComponent} from '../lib/components/ImageNew';
 import {youtube_parser} from '../utils/common';
 import {getYoutubeMeta} from 'react-native-youtube-iframe';
+import { URL_SHARE_NOTES } from '../environments';
 
 export const NewScreen = ({navigation}) => {
-    const currentId = useSelector(state => state.newStore.newCurrentId);
-//   const currentId = 2;
+  const currentId = useSelector(state => state.newStore.newCurrentId);
+  //   const currentId = 2;
 
   const dispatch = useDispatch();
   const [page, setPage] = React.useState(1);
   const [handlingData, setHandlingData] = React.useState(true);
   const [listNews, setListNews] = React.useState([]);
   const [textSize, setTextSize] = React.useState(16);
+  const [indexNote, setIndexNote] = React.useState(0);
 
   const fetchNewsBySlugSource = React.useCallback(
     async currentNew => {
@@ -108,20 +110,21 @@ export const NewScreen = ({navigation}) => {
 
   return (
     <Box flex={1}>
-      <SingleHeader navigation={navigation}>
-        <HStack space="lg" paddingHorizontal={'$1'}>
-          <SizeTextButton icon={PlusIcon} onPress={biggerText} />
-          <SizeTextButton icon={MinusIcon} onPress={smallerText} />
-          <Button onPress={() => {}} variant="link" size="xl">
-            <ButtonIcon as={ShareIcon} color="$white" size="xl" />
-          </Button>
-        </HStack>
-      </SingleHeader>
-      <PageContent
-        listNews={listNews}
-        fontSizeTexts={textSize}
-        navigation={navigation}
-      />
+      <SingleHeader navigation={navigation} title={'Detalles'} />
+      {handlingData ? (
+        <VStack justifyContent="center" flex={1}>
+          <ActivityIndicator size="large" color={'#c80000'} />
+        </VStack>
+      ) : (
+        <PageContent
+          listNews={listNews}
+          fontSizeTexts={textSize}
+          navigation={navigation}
+          setIndexNote={setIndexNote}
+          biggerText={biggerText}
+          smallerText={smallerText}
+        />
+      )}
     </Box>
   );
 };
@@ -138,22 +141,33 @@ const SizeTextButton = props => {
 };
 
 const PageContent = props => {
-  const {listNews = [], fontSizeTexts = 16, navigation = {}} = props;
+  const {
+    listNews = [],
+    fontSizeTexts = 16,
+    navigation = {},
+    biggerText = () => {},
+    smallerText = () => {},
+  } = props;
   return (
     <PagerView
       style={{
         flex: 1,
       }}
       scrollEnabled={true}
-      overScrollMode={'never'}
       initialPage={0}>
       {listNews.map((note, index) => (
-        <CardView
-          note={note}
-          key={index}
-          fontSizeTexts={fontSizeTexts}
-          navigation={navigation}
-        />
+        <VStack key={index} flex={1}>
+          <CardView
+            note={note}
+            fontSizeTexts={fontSizeTexts}
+            navigation={navigation}
+          />
+          <BottomMenuNote
+            item={note}
+            biggerText={biggerText}
+            smallerText={smallerText}
+          />
+        </VStack>
       ))}
     </PagerView>
   );
@@ -240,6 +254,7 @@ const CardView = props => {
       navigation.navigate('VideoModal', {video: videoMetadata});
     }
   };
+
   return (
     <VStack
       flex={1}
@@ -309,5 +324,40 @@ const CardView = props => {
         </Box>
       </ScrollView>
     </VStack>
+  );
+};
+
+const BottomMenuNote = props => {
+  const {biggerText = () => {}, smallerText = () => {}, item = {}} = props;
+
+  const shareNew = async () => {
+    let noteInfo = `${item.source.slug}/${item.slug_name}`;
+    try {
+      const result = await Share.share({
+        message: `${URL_SHARE_NOTES}${noteInfo}`,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+        } else {
+        }
+      } else if (result.action === Share.dismissedAction) {
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return (
+    <HStack
+      justifyContent="space-around"
+      paddingHorizontal={'$4'}
+      backgroundColor="$black"
+      paddingBottom={'$2'}>
+      <SizeTextButton icon={PlusIcon} onPress={biggerText} />
+      <SizeTextButton icon={MinusIcon} onPress={smallerText} />
+      <Button onPress={shareNew} variant="link" size="xl">
+        <ButtonIcon as={ShareIcon} color="$white" size="xl" />
+      </Button>
+    </HStack>
   );
 };

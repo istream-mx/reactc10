@@ -74,7 +74,7 @@ const ImageComponentByType = props => {
               color="$white"
               alignSelf="center"
               p={'$10'}
-              opacity={'$60'}
+              opacity={'$80'}
             />
           </Box>
         </ImageBackground>

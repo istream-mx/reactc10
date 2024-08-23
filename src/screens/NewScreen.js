@@ -1,5 +1,4 @@
 import * as React from 'react';
-// import {AppBar} from '../lib/components/AppBar';
 import {
   Box,
   Text,
@@ -15,7 +14,7 @@ import {
 } from '@gluestack-ui/themed';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchNewById, fetchNewsData} from '../app/reducers/newStore';
-import {CardNew} from '../lib/components/CardNew';
+// import {CardNew} from '../lib/components/CardNew';
 import {SingleHeader} from '../lib/components/SingleHeader';
 import {InfoIcon, MinusIcon, PlusIcon} from 'lucide-react-native';
 import PagerView from 'react-native-pager-view';
@@ -27,7 +26,8 @@ import {ActivityIndicator, Share, useWindowDimensions} from 'react-native';
 import {ImageNew, ImageNewComponent} from '../lib/components/ImageNew';
 import {youtube_parser} from '../utils/common';
 import {getYoutubeMeta} from 'react-native-youtube-iframe';
-import { URL_SHARE_NOTES } from '../environments';
+import {URL_SHARE_NOTES} from '../environments';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export const NewScreen = ({navigation}) => {
   const currentId = useSelector(state => state.newStore.newCurrentId);
@@ -110,7 +110,20 @@ export const NewScreen = ({navigation}) => {
 
   return (
     <Box flex={1}>
-      <SingleHeader navigation={navigation} title={'Detalles'} />
+      <SingleHeader navigation={navigation} title={'Detalles'}>
+        <HStack
+          justifyContent="flex-end"
+          paddingHorizontal={'$3'}
+          paddingTop={'$2'}>
+          {listNews.length > 0 ? (
+            <Text bold color="$white">{`${indexNote + 1} / ${
+              listNews.length
+            }`}</Text>
+          ) : (
+            <Box />
+          )}
+        </HStack>
+      </SingleHeader>
       {handlingData ? (
         <VStack justifyContent="center" flex={1}>
           <ActivityIndicator size="large" color={'#c80000'} />
@@ -123,6 +136,7 @@ export const NewScreen = ({navigation}) => {
           setIndexNote={setIndexNote}
           biggerText={biggerText}
           smallerText={smallerText}
+          setCurrentIndexPage={setIndexNote}
         />
       )}
     </Box>
@@ -147,16 +161,28 @@ const PageContent = props => {
     navigation = {},
     biggerText = () => {},
     smallerText = () => {},
+    setCurrentIndexPage = () => {},
   } = props;
+
+  const onPageScroll = e => {
+    setCurrentIndexPage(e.nativeEvent.position);
+  };
   return (
     <PagerView
       style={{
         flex: 1,
       }}
+      onPageScroll={onPageScroll}
       scrollEnabled={true}
       initialPage={0}>
       {listNews.map((note, index) => (
-        <VStack key={index} flex={1}>
+        <VStack
+          key={index}
+          flex={1}
+          sx={{
+            _light: {bg: '$white'},
+            _dark: {bg: '$backgroundDark800'},
+          }}>
           <CardView
             note={note}
             fontSizeTexts={fontSizeTexts}
@@ -259,31 +285,31 @@ const CardView = props => {
     <VStack
       flex={1}
       space="sm"
-      shadowColor="#00000070"
-      elevation={5}
-      borderRadius={'$lg'}
-      padding={'$1'}>
+      paddingHorizontal={'$2'}
+      paddingTop={'$2'}
+      // shadowColor="#00000070"
+      // elevation={5}
+      // borderRadius={'$lg'}
+    >
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Text
-          size="2xl"
-          bold
-          borderLeftColor="#c80000"
-          borderLeftWidth={'$8'}
-          paddingHorizontal={'$3'}
-          paddingTop={'$2'}>
-          {note.title}
-        </Text>
-        <VStack>
+        <VStack borderLeftColor="#c80000" borderLeftWidth={'$8'}>
+          <Text size="2xl" bold paddingTop={'$2'} paddingHorizontal={'$3'}>
+            {note.title}
+          </Text>
+        </VStack>
+        <VStack paddingVertical={'$2'}>
           <Text
             fontSize={fontSizeTexts}
             paddingHorizontal={'$3'}
-            paddingTop={'$2'}>
+            paddingTop={'$2'}
+            opacity={'$60'}>
             {sourceName(note.source)}
           </Text>
           <Text
             fontSize={fontSizeTexts}
             paddingHorizontal={'$3'}
-            paddingVertical={'$2'}>
+            paddingVertical={'$2'}
+            fontStyle="italic">
             {formatScheduleDate(note.publish_date)}
           </Text>
         </VStack>
@@ -329,6 +355,7 @@ const CardView = props => {
 
 const BottomMenuNote = props => {
   const {biggerText = () => {}, smallerText = () => {}, item = {}} = props;
+  const insets = useSafeAreaInsets();
 
   const shareNew = async () => {
     let noteInfo = `${item.source.slug}/${item.slug_name}`;
@@ -352,7 +379,8 @@ const BottomMenuNote = props => {
       justifyContent="space-around"
       paddingHorizontal={'$4'}
       backgroundColor="$black"
-      paddingBottom={'$2'}>
+      paddingBottom={'$2'}
+      pb={insets.bottom || '$2'}>
       <SizeTextButton icon={PlusIcon} onPress={biggerText} />
       <SizeTextButton icon={MinusIcon} onPress={smallerText} />
       <Button onPress={shareNew} variant="link" size="xl">

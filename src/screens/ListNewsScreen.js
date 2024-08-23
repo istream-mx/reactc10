@@ -19,12 +19,14 @@ import {
 import {CardNew} from '../lib/components/CardNew';
 import {SearchIcon} from 'lucide-react-native';
 import {ActivityIndicator, TextInput} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export const ListNewsScreen = ({navigation}) => {
   const listNews = useSelector(state => state.newStore.listNews);
   const dispatch = useDispatch();
   const [page, setPage] = React.useState(1);
   const [handlingData, setHandlingData] = React.useState(true);
+  const insets = useSafeAreaInsets();
 
   const fetchData = React.useCallback(
     async (addItems, newPage) => {
@@ -85,7 +87,7 @@ export const ListNewsScreen = ({navigation}) => {
   }, []);
 
   return (
-    <Box flex={1}>
+    <Box flex={1} pb={insets.bottom || '$2'}>
       <AppBar navigation={navigation} title={'Noticias'}>
         <Button
           variant="link"
@@ -101,6 +103,7 @@ export const ListNewsScreen = ({navigation}) => {
         onEndReachedThreshold={0.1}
         refreshing={handlingData}
         onRefresh={() => onRefresh()}
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{
           flexGrow: 1,
           justifyContent:
@@ -123,7 +126,11 @@ export const ListNewsScreen = ({navigation}) => {
         }
         renderItem={({item}) => (
           <Box paddingHorizontal={'$2'} paddingVertical={'$2'}>
-            <CardNew item={item} onPress={() => onPressTo(item)} />
+            <CardNew
+              item={item}
+              onPress={() => onPressTo(item)}
+              navigation={navigation}
+            />
           </Box>
         )}
         keyExtractor={(_item, index) => `${index}-schedule`}

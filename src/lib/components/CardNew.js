@@ -22,7 +22,7 @@ import {Share} from 'react-native';
 import {URL_SHARE_NOTES} from '../../environments';
 
 export const CardNew = props => {
-  const {item = {}, onPress = () => {}} = props;
+  const {item = {}, onPress = () => {}, navigation = {}} = props;
 
   const [videoMetadata, setVideoMetadata] = React.useState({});
 
@@ -114,10 +114,14 @@ export const CardNew = props => {
   return (
     <VStack
       space="sm"
-      shadowColor="#00000070"
-      elevation={5}
+      // shadowColor="#00000070"
+      // elevation={8}
       borderRadius={'$lg'}
-      padding={'$1'}>
+      // padding={'$1'}
+      sx={{
+        _light: {bg: '$white'},
+        _dark: {bg: '$backgroundDark800'},
+      }}>
       <Pressable onPress={onPressImageByHasVideo}>
         <ImageNewComponent
           url={firstImage}
@@ -128,23 +132,26 @@ export const CardNew = props => {
       </Pressable>
       <Pressable onPress={onPress}>
         <VStack space="sm">
+          <VStack borderLeftColor="#c80000" borderLeftWidth={'$8'}>
+            <Text flex={1} size="xl" bold paddingHorizontal={'$3'}>
+              {item.title}
+            </Text>
+          </VStack>
+
           <Text
             flex={1}
-            size="xl"
-            bold
-            borderLeftColor="#c80000"
-            borderLeftWidth={'$8'}
-            paddingHorizontal={'$3'}>
-            {item.title}
-          </Text>
-          <Text flex={1} size="md" paddingHorizontal={'$3'} paddingTop={'$1'}>
+            size="sm"
+            paddingHorizontal={'$3'}
+            paddingTop={'$1'}
+            opacity={'$60'}>
             {sourceName(item.source)}
           </Text>
           <Text
             flex={1}
-            size="md"
+            size="sm"
             paddingHorizontal={'$3'}
-            paddingVertical={'$2'}>
+            paddingTop={'$1'}
+            fontStyle="italic">
             {formatScheduleDate(item.publish_date)}
           </Text>
           <HStack justifyContent="flex-end" paddingHorizontal={'$4'}>

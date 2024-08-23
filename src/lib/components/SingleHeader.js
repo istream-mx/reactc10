@@ -22,13 +22,9 @@ export const SingleHeader = props => {
         <ButtonIcon as={ArrowLeftIcon} color="$white" size="xl" />
       </Button>
       <Box flex={1} alignItems="center">
-        <Text color="$white">{title}</Text>
+        <Text color="$white" bold>{title}</Text>
       </Box>
-      {children && (
-        <Box flex={1} alignItems="flex-end">
-          {children}
-        </Box>
-      )}
+      {children && <Box alignItems="flex-end">{children}</Box>}
     </HStack>
   );
 };

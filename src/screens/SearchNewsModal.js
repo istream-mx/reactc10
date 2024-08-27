@@ -13,20 +13,28 @@ import {
   InputIcon,
 } from '@gluestack-ui/themed';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchNewsData, setNewCurrentId} from '../app/reducers/newStore';
+import {
+  fetchNewsData,
+  setAddNewSearchItems,
+  setListNewSearch,
+  setNewCurrentId,
+} from '../app/reducers/newStore';
 import {CardNew} from '../lib/components/CardNew';
 import {SingleHeader} from '../lib/components/SingleHeader';
 import {HeaderWithComponent} from '../lib/components/HeaderWithComponent';
 import debounce from 'lodash.debounce';
 import {SearchIcon} from 'lucide-react-native';
 import {ActivityIndicator} from 'react-native';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export const SearchNewsModal = ({navigation}) => {
-  const dispatch = useDispatch();
   const [page, setPage] = React.useState(1);
   const [handlingData, setHandlingData] = React.useState(false);
   const [query, setQuery] = React.useState('');
-  const [listNews, setListNews] = React.useState([]);
+  const listNews = useSelector(state => state.newStore.listSearch);
+
+  const insets = useSafeAreaInsets();
+  const dispatch = useDispatch();
 
   const fetchData = React.useCallback(
     async (addItems, newPage, title) => {
@@ -46,11 +54,12 @@ export const SearchNewsModal = ({navigation}) => {
         }),
       )
         .then(response => {
-          setListNews(response.payload);
+          dispatch(setAddNewSearchItems(response.payload));
           setPage(newPage);
           setHandlingData(false);
         })
         .catch(error => {
+          console.log(error);
           setHandlingData(false);
         });
     },
@@ -70,7 +79,7 @@ export const SearchNewsModal = ({navigation}) => {
 
   const onRefresh = () => {
     setPage(1);
-    setListNews([]);
+    dispatch(setListNewSearch([]));
     fetchData(false, 1, query);
   };
 
@@ -78,6 +87,10 @@ export const SearchNewsModal = ({navigation}) => {
     navigation.navigate('NewScreen', {});
     dispatch(setNewCurrentId(item.id));
   };
+
+  React.useEffect(() => {
+    dispatch(setListNewSearch([]));
+  }, []);
 
   React.useEffect(() => {
     if (query.length > 2) {
@@ -88,7 +101,7 @@ export const SearchNewsModal = ({navigation}) => {
   const debouncedSetAddText = debounce(setQuery, 250);
 
   return (
-    <Box flex={1}>
+    <Box flex={1} pb={insets.bottom || '$2'}>
       <HeaderWithComponent navigation={navigation}>
         <Input backgroundColor="$white">
           <InputSlot padding={'$1'}>

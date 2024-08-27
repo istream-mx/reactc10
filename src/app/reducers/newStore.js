@@ -69,6 +69,7 @@ export const newStore = createSlice({
     newCurrentId: null,
     newCurrent: {},
     listNews: [],
+    listSearch: [],
   },
   reducers: {
     setNewCurrentId: (state, action) => {
@@ -77,16 +78,28 @@ export const newStore = createSlice({
     setListNews: (state, action) => {
       state.listNews = action.payload;
     },
+    setListNewSearch: (state, action) => {
+      state.listSearch = action.payload;
+    },
     setNewCurrent: (state, action) => {
       state.newCurrent = action.payload;
     },
     setAddNewItems: (state, action) => {
       state.listNews = [...state.listNews, ...action.payload];
     },
+    setAddNewSearchItems: (state, action) => {
+      state.listSearch = [...state.listSearch, ...action.payload];
+    },
   },
 });
 
-export const {setNewCurrentId, setListNews, setNewCurrent, setAddNewItems} =
-  newStore.actions;
+export const {
+  setNewCurrentId,
+  setListNews,
+  setNewCurrent,
+  setAddNewItems,
+  setAddNewSearchItems,
+  setListNewSearch
+} = newStore.actions;
 
 export default newStore.reducer;

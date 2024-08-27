@@ -51,6 +51,11 @@ export const Player = props => {
     // videoRef.current.player.ref.dismissFullscreenPlayer();
     dispatch(setIsFullScreenVideoPlayer(false));
   };
+
+  const onError = error => {
+    // videoRef.current.player.ref.dismissFullscreenPlayer();
+    console.log(error);
+  };
   return (
     // <Box width={'$full'} height={isFullScreenVideoPlayer ? height : height / 3}>
     <VideoPlayer
@@ -69,6 +74,7 @@ export const Player = props => {
       toggleResizeModeOnFullscreen={false}
       onEnterFullscreen={presentFullscreen}
       onExitFullscreen={exitFullscreen}
+      onError={onError}
       style={styles.vid}
     />
   );

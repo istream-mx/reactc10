@@ -17,9 +17,7 @@ export const MoreDetailsScreen = ({navigation}) => {
   };
   return (
     <VStack flex={1} space="sm">
-      <AppBar navigation={navigation}>
-        <Text color="$white">{'Más+'}</Text>
-      </AppBar>
+      <AppBar navigation={navigation} title={'Más+'} />
       <ScrollView paddingHorizontal={'$2'}>
         <Box sx={{bg: '$backgroundLight0', _dark: {bg: '$backgroundDark700'}}}>
           <TouchableHighlight

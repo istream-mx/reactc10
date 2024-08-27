@@ -47,7 +47,7 @@ export const SearchNewsModal = ({navigation}) => {
             publish_movil: true,
             publish_date_movil: true,
             pagination: {
-              size: '5',
+              size: '10',
               page: `${newPage}`,
             },
           },

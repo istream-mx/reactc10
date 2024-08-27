@@ -38,9 +38,7 @@ export const LiveStreamModal = ({navigation}) => {
   return (
     <Box flex={1}>
       {!isFullScreenVideoPlayer ? (
-        <AppBar navigation={navigation}>
-          <Text color="$white">{'TV en Vivo'}</Text>
-        </AppBar>
+        <AppBar navigation={navigation} title={'TV en Vivo'} />
       ) : (
         <StatusBar hidden={true} />
       )}

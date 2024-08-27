@@ -61,6 +61,10 @@ export const ListScheduleEvents = props => {
       </HStack>
       <FlatList
         data={filterScheduleList}
+        contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: 'center',
+        }}
         ListEmptyComponent={
           <HStack justifyContent="center">
             <Text bold opacity={'$60'}>

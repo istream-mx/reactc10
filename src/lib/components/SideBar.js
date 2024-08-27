@@ -10,6 +10,7 @@ import {
 import {
   DotSquare,
   DotSquareIcon,
+  InfoIcon,
   MoreHorizontalIcon,
   TvIcon,
 } from 'lucide-react-native';
@@ -52,37 +53,30 @@ export const SideBar = ({navigation}) => {
         />
       </VStack>
       <ScrollView paddingVertical={20}>
-        <Box
-          backgroundColor={
-            currentPath === 'LiveStreamModal' ? '#c80000' : 'transparent'
-          }>
-          <TouchableHighlight onPress={() => navigateTo('LiveStreamModal')}>
-            <HStack space="lg" padding={'$3'}>
-              <Icon as={TvIcon} color="$white" alignSelf="center" p="$3" />
-              <Text color="$white" size="md">
-                {'Ver TV en Vivo'}
-              </Text>
-            </HStack>
-          </TouchableHighlight>
-        </Box>
-        <Box
-          backgroundColor={
-            currentPath === 'MoreDetailsScreen' ? '#c80000' : 'transparent'
-          }>
-          <TouchableHighlight onPress={() => navigateTo('MoreDetailsScreen')}>
-            <HStack space="lg" padding={'$3'}>
-              <Icon
-                as={MoreHorizontalIcon}
-                color="$white"
-                alignSelf="center"
-                p="$3"
-              />
-              <Text color="$white" size="md">
-                {'Más+'}
-              </Text>
-            </HStack>
-          </TouchableHighlight>
-        </Box>
+        <SideBarButton
+          currentPath={currentPath}
+          pathName={'LiveStreamModal'}
+          navigationPath={'LiveStreamModal'}
+          icon={TvIcon}
+          navigateTo={navigateTo}
+          title={'Ver TV en Vivo'}
+        />
+        <SideBarButton
+          currentPath={currentPath}
+          pathName={'ListNewsScreen'}
+          navigationPath={'ListNewsScreen'}
+          icon={TvIcon}
+          navigateTo={navigateTo}
+          title={'Noticias'}
+        />
+        <SideBarButton
+          currentPath={currentPath}
+          pathName={'MoreDetailsScreen'}
+          navigationPath={'MoreDetailsScreen'}
+          icon={MoreHorizontalIcon}
+          navigateTo={navigateTo}
+          title={'Más+'}
+        />
       </ScrollView>
       <VStack
         alignItems="center"
@@ -104,6 +98,28 @@ export const SideBar = ({navigation}) => {
   );
 };
 
+const SideBarButton = props => {
+  const {
+    currentPath = '',
+    pathName = '',
+    navigationPath = '',
+    icon = InfoIcon,
+    navigateTo = () => {},
+    title = '',
+  } = props;
+  return (
+    <Box backgroundColor={currentPath === pathName ? '#c80000' : 'transparent'}>
+      <TouchableHighlight onPress={() => navigateTo(navigationPath)}>
+        <HStack space="lg" padding={'$3'}>
+          <Icon as={icon} color="$white" alignSelf="center" p="$3" />
+          <Text color="$white" size="md">
+            {title}
+          </Text>
+        </HStack>
+      </TouchableHighlight>
+    </Box>
+  );
+};
 const SocialMediaButton = props => {
   const {type = ''} = props;
 

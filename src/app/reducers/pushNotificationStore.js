@@ -28,14 +28,19 @@ export const pushNotificationStore = createSlice({
   name: 'pushNotificationStore',
   initialState: {
     isNotificationMode: false,
+    closeNotifiactionModal: false,
   },
   reducers: {
     setIsNotificationMode: (state, action) => {
       state.isNotificationMode = action.payload;
     },
+    setCloseNotifiactionModal: (state, action) => {
+      state.closeNotifiactionModal = action.payload;
+    },
   },
 });
 
-export const {setIsNotificationMode} = pushNotificationStore.actions;
+export const {setIsNotificationMode, setCloseNotifiactionModal} =
+  pushNotificationStore.actions;
 
 export default pushNotificationStore.reducer;

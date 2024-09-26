@@ -12,6 +12,7 @@ import {
   DotSquareIcon,
   InfoIcon,
   MoreHorizontalIcon,
+  NewspaperIcon,
   TvIcon,
 } from 'lucide-react-native';
 import * as React from 'react';
@@ -65,7 +66,7 @@ export const SideBar = ({navigation}) => {
           currentPath={currentPath}
           pathName={'ListNewsScreen'}
           navigationPath={'ListNewsScreen'}
-          icon={TvIcon}
+          icon={NewspaperIcon}
           navigateTo={navigateTo}
           title={'Noticias'}
         />

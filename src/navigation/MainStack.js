@@ -27,6 +27,11 @@ import {
 } from '../app/reducers/pushNotificationStore';
 import {get} from 'lodash';
 import {setNewCurrentId} from '../app/reducers/newStore';
+import {
+  checkNotifications,
+  requestNotifications,
+} from 'react-native-permissions';
+import {setStatusNotificationPermission} from '../app/reducers/persitStore';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +39,9 @@ const MainStack = () => {
   const updateInfo = useSelector(state => state.updateInfoStore.updateInfo);
   const isNotificationMode = useSelector(
     state => state.pushNotificationStore.isNotificationMode,
+  );
+  const localStatusNotifiactionPermission = useSelector(
+    state => state.persitStore.statusNotificationPermission,
   );
 
   const hasCheckForUpdate = useSelector(
@@ -54,70 +62,89 @@ const MainStack = () => {
     return notificationsPermissionCheck == 'granted';
   };
 
+  const notificationConfiguration = () => {
+    PushNotification.configure({
+      onRegister: function (token) {
+        dispatch(
+          registerTokenNotificationDevice({
+            tokenNotification: token.token,
+            typeDevice: token.os,
+          }),
+        )
+          .then(_response => {
+            // console.log({response});
+          })
+          .catch(error => {
+            console.log({error});
+          });
+        // console.log('TOKEN:', token);
+      },
+      onNotification: function (notification) {
+        // console.log('NOTIFICATION:', notification.data.note_id);
+        let hasNoteId = get(notification, 'data.note_id', null);
+        let hasFinish = get(notification, 'finish', null);
+        if (AppState.currentState != 'active') {
+          if (hasNoteId != null) {
+            dispatch(setNewCurrentId(Number(hasNoteId)));
+            dispatch(setIsNotificationMode(true));
+          } else {
+            dispatch(setIsNotificationMode(false));
+          }
+        } else {
+          // console.log('NOTIFICATION:', notification);
+          PushNotification.localNotification(notification);
+        }
+
+        // process the notification
+
+        // (required) Called when a remote is received or opened, or local notification is opened
+        if (hasFinish != null) {
+          notification.finish(PushNotificationIOS.FetchResult.NoData);
+        }
+      },
+      onAction: function (notification) {
+        console.log('ACTION:', notification.action);
+        console.log('NOTIFICATION:', notification);
+
+        // process the action
+      },
+      onRegistrationError: function (err) {
+        console.error(err.message, err);
+      },
+      permissions: {
+        alert: true,
+        badge: true,
+        sound: true,
+      },
+      popInitialNotification: true,
+      requestPermissions: true,
+    });
+  };
+
   const checkApplicationPermission = async () => {
-    if (Platform.OS == 'android') {
-      if (await hasAndroidPermissions()) {
-        PushNotification.configure({
-          onRegister: function (token) {
-            dispatch(
-              registerTokenNotificationDevice({
-                tokenNotification: token.token,
-                typeDevice: token.os,
-              }),
-            )
-              .then(response => {
-                // console.log({response});
-              })
-              .catch(error => {
-                console.log({error});
-              });
-            // console.log('TOKEN:', token);
-          },
-          onNotification: function (notification) {
-            // console.log('NOTIFICATION:', notification.data.note_id);
-            let hasNoteId = get(notification, 'data.note_id', null);
-            let hasFinish = get(notification, 'finish', null);
-            if (AppState.currentState != 'active') {
-              if (hasNoteId != null) {
-                dispatch(setNewCurrentId(Number(hasNoteId)));
-                dispatch(setIsNotificationMode(true));
-              } else {
-                dispatch(setIsNotificationMode(false));
-              }
-            } else {
-              // console.log('NOTIFICATION:', notification);
-              PushNotification.localNotification(notification);
+    checkNotifications().then(({status, _settings}) => {
+      // console.log({status});
+      if (status == 'granted') {
+        dispatch(setStatusNotificationPermission(status));
+        notificationConfiguration();
+      } else if (
+        status != 'granted' &&
+        localStatusNotifiactionPermission == null
+      ) {
+        requestNotifications(['alert', 'sound', 'badge']).then(
+          ({status, _settings}) => {
+            dispatch(setStatusNotificationPermission(status));
+            if (status == 'granted') {
+              notificationConfiguration();
             }
-
-            // process the notification
-
-            // (required) Called when a remote is received or opened, or local notification is opened
-            if (hasFinish != null) {
-              notification.finish(PushNotificationIOS.FetchResult.NoData);
-            }
+            // console.log({status});
           },
-          onAction: function (notification) {
-            console.log('ACTION:', notification.action);
-            console.log('NOTIFICATION:', notification);
-
-            // process the action
-          },
-          onRegistrationError: function (err) {
-            console.error(err.message, err);
-          },
-          permissions: {
-            alert: true,
-            badge: true,
-            sound: true,
-          },
-          popInitialNotification: true,
-          requestPermissions: true,
-        });
+        );
       } else {
-        console.log('Notification permission denied');
+        dispatch(setStatusNotificationPermission(status));
+        console.log({status});
       }
-    } else {
-    }
+    });
   };
 
   React.useEffect(() => {

@@ -3,7 +3,7 @@ import {createSlice} from '@reduxjs/toolkit';
 export const sideBarPathStore = createSlice({
   name: 'sideBarPathStore',
   initialState: {
-    sideBarPathCurrent: 'LiveStreamModal',
+    sideBarPathCurrent: 'ListNewsScreen',
   },
   reducers: {
     setSideBarCurrent: (state, action) => {

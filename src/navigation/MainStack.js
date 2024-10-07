@@ -50,16 +50,37 @@ const MainStack = () => {
 
   const dispatch = useDispatch();
 
-  const hasAndroidPermissions = async () => {
-    let notificationsPermissionCheck = 'granted';
+  const hasNoteIdByDeviceType = (notification, typeDevice) => {
+    switch (typeDevice) {
+      case 'ios':
+        return get(notification, 'data.aps.target-content-id', null);
 
-    if (Number(Platform.Version) >= 33) {
-      notificationsPermissionCheck = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
-      );
+      case 'android':
+        return get(notification, 'data.note_id', null);
+      default:
+        return null;
     }
+  };
 
-    return notificationsPermissionCheck == 'granted';
+  const hasFinishByDeviceType = (notification, typeDevice) => {
+    switch (typeDevice) {
+      case 'ios':
+        return get(notification, 'data.finish', null);
+
+      case 'android':
+        return get(notification, 'finish', null);
+      default:
+        return null;
+    }
+  };
+
+  const openModalNotification = hasNoteId => {
+    if (hasNoteId != null) {
+      dispatch(setNewCurrentId(Number(hasNoteId)));
+      dispatch(setIsNotificationMode(true));
+    } else {
+      dispatch(setIsNotificationMode(false));
+    }
   };
 
   const notificationConfiguration = () => {
@@ -81,20 +102,16 @@ const MainStack = () => {
       },
       onNotification: function (notification) {
         // console.log('NOTIFICATION:', notification.data.note_id);
-        let hasNoteId = get(notification, 'data.note_id', null);
-        let hasFinish = get(notification, 'finish', null);
+        let hasNoteId = hasNoteIdByDeviceType(notification, Platform.OS);
+        let hasFinish = hasFinishByDeviceType(notification, Platform.OS);
         if (AppState.currentState != 'active') {
-          if (hasNoteId != null) {
-            dispatch(setNewCurrentId(Number(hasNoteId)));
-            dispatch(setIsNotificationMode(true));
-          } else {
-            dispatch(setIsNotificationMode(false));
-          }
+          openModalNotification(hasNoteId);
         } else {
           // console.log('NOTIFICATION:', notification);
-          PushNotification.localNotification(notification);
+          if (Platform.OS == 'android') {
+            PushNotification.localNotification(notification);
+          }
         }
-
         // process the notification
 
         // (required) Called when a remote is received or opened, or local notification is opened

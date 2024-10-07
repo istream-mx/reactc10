@@ -107,7 +107,7 @@ export const CardNew = props => {
       } else if (result.action === Share.dismissedAction) {
       }
     } catch (error) {
-      console.log(error);
+      console.log({error});
     }
   };
 

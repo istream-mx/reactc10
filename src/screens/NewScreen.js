@@ -112,7 +112,6 @@ export const NewScreen = ({navigation}) => {
   };
 
   const onNotificationBack = async () => {
-    console.log('ON PRESS');
     await dispatch(setIsNotificationMode(false));
   };
 

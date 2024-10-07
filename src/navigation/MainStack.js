@@ -101,16 +101,14 @@ const MainStack = () => {
         // console.log('TOKEN:', token);
       },
       onNotification: function (notification) {
-        // console.log('NOTIFICATION:', notification.data.note_id);
         let hasNoteId = hasNoteIdByDeviceType(notification, Platform.OS);
         let hasFinish = hasFinishByDeviceType(notification, Platform.OS);
-        if (AppState.currentState != 'active') {
+        if (AppState.currentState == 'active' && Platform.OS == 'android') {
+          PushNotification.localNotification(notification);
+        }
+
+        if (notification.userInteraction) {
           openModalNotification(hasNoteId);
-        } else {
-          // console.log('NOTIFICATION:', notification);
-          if (Platform.OS == 'android') {
-            PushNotification.localNotification(notification);
-          }
         }
         // process the notification
 

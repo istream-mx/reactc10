@@ -16,7 +16,8 @@ const MainDrawer = ({navigation}) => {
         },
         drawerType: 'front',
       }}
-      drawerContent={_props => <SideBar navigation={navigation} />}>
+      drawerContent={_props => <SideBar navigation={navigation} />}
+      initialRouteName="ListNewsScreen">
       <Drawer.Screen
         name="LiveStreamModal"
         component={LiveStreamModal}

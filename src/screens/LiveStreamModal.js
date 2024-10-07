@@ -43,7 +43,7 @@ export const LiveStreamModal = ({navigation}) => {
         <StatusBar hidden={true} />
       )}
       <VStack justifyContent="center" flex={1} backgroundColor="$black">
-        {/* {liveStream?.url && <Player url={liveStream.url} />} */}
+        {liveStream?.url && <Player url={liveStream.url} />}
       </VStack>
       {!isFullScreenVideoPlayer && (
         <ListScheduleEvents scheduleEvents={scheduleEvents} />

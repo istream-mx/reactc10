@@ -28,9 +28,17 @@ import {youtube_parser} from '../utils/common';
 import {getYoutubeMeta} from 'react-native-youtube-iframe';
 import {URL_SHARE_NOTES} from '../environments';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {
+  setCloseNotifiactionModal,
+  setIsNotificationMode,
+} from '../app/reducers/pushNotificationStore';
 
 export const NewScreen = ({navigation}) => {
   const currentId = useSelector(state => state.newStore.newCurrentId);
+  const isNotificationMode = useSelector(
+    state => state.pushNotificationStore.isNotificationMode,
+  );
+
   //   const currentId = 2;
 
   const dispatch = useDispatch();
@@ -103,14 +111,22 @@ export const NewScreen = ({navigation}) => {
     }
   };
 
+  const onNotificationBack = async () => {
+    console.log('ON PRESS');
+    await dispatch(setIsNotificationMode(false));
+  };
+
   React.useEffect(() => {
     setHandlingData(true);
     fetchData();
   }, []);
-
   return (
     <Box flex={1}>
-      <SingleHeader navigation={navigation} title={'Detalles'}>
+      <SingleHeader
+        navigation={navigation}
+        title={'Detalles'}
+        isNotificationMode={isNotificationMode}
+        onPressNotification={onNotificationBack}>
         <HStack
           justifyContent="flex-end"
           paddingHorizontal={'$3'}
@@ -233,9 +249,11 @@ const CardView = props => {
   const tagsStyles = {
     body: {
       fontSize: fontSizeTexts,
+      color: 'black',
     },
     p: {
       fontSize: fontSizeTexts,
+      color: 'black',
     },
   };
 

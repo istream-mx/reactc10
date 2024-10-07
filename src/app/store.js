@@ -11,6 +11,7 @@ const persistConfig = {
     'liveStreamStore',
     'updateInfoStore',
     'newStore',
+    'pushNotificationStore',
   ],
 };
 

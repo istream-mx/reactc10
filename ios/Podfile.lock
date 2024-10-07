@@ -446,8 +446,12 @@ PODS:
     - React-perflogger (= 0.72.3)
   - RNCAsyncStorage (1.23.1):
     - React-Core
+  - RNCPushNotificationIOS (1.11.0):
+    - React-Core
   - RNGestureHandler (2.16.2):
     - RCT-Folly (= 2021.07.22.00)
+    - React-Core
+  - RNPermissions (4.1.5):
     - React-Core
   - RNReanimated (3.11.0):
     - RCT-Folly (= 2021.07.22.00)
@@ -511,7 +515,9 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
+  - "RNCPushNotificationIOS (from `../node_modules/@react-native-community/push-notification-ios`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNPermissions (from `../node_modules/react-native-permissions`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNSVG (from `../node_modules/react-native-svg`)
@@ -617,8 +623,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
+  RNCPushNotificationIOS:
+    :path: "../node_modules/@react-native-community/push-notification-ios"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNPermissions:
+    :path: "../node_modules/react-native-permissions"
   RNReanimated:
     :path: "../node_modules/react-native-reanimated"
   RNScreens:
@@ -677,13 +687,15 @@ SPEC CHECKSUMS:
   React-utils: bcb57da67eec2711f8b353f6e3d33bd8e4b2efa3
   ReactCommon: 3ccb8fb14e6b3277e38c73b0ff5e4a1b8db017a9
   RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
+  RNCPushNotificationIOS: 64218f3c776c03d7408284a819b2abfda1834bc8
   RNGestureHandler: d678f94a8f74de70ce3d9f5d23eb0f97b686e943
+  RNPermissions: 5b96247c15864f9d89d7f51eeb0f2b736a2b212d
   RNReanimated: 9d4971e437f38c11fd2c43344ac9d40c330058b1
   RNScreens: 93ae3be2f119d955620f9bbb39ad372adb53b7a9
   RNSVG: 07dbd870b0dcdecc99b3a202fa37c8ca163caec2
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: 8796b55dba14d7004f980b54bcc9833ee45b28ce
 
-PODFILE CHECKSUM: f19637f947fd42c50186576721492e7a776c8e7b
+PODFILE CHECKSUM: 89107351181280a2c17805579f389a7c60e1df86
 
 COCOAPODS: 1.15.2

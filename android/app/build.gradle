@@ -76,7 +76,7 @@ def _versionName = System.getenv("ANDROID_VERSION_NAME") ?: "1.0.0"
 android {
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
-    compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdk rootProject.ext.compileSdkVersion
 
     namespace "com.reactnativeapp"
     defaultConfig {

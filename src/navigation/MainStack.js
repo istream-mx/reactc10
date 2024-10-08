@@ -20,7 +20,7 @@ import {
   AppState,
 } from 'react-native';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import PushNotification from 'react-native-push-notification';
+import PushNotification, {Importance} from 'react-native-push-notification';
 import {
   registerTokenNotificationDevice,
   setIsNotificationMode,
@@ -103,9 +103,6 @@ const MainStack = () => {
       onNotification: function (notification) {
         let hasNoteId = hasNoteIdByDeviceType(notification, Platform.OS);
         let hasFinish = hasFinishByDeviceType(notification, Platform.OS);
-        if (AppState.currentState == 'active' && Platform.OS == 'android') {
-          PushNotification.localNotification(notification);
-        }
 
         if (notification.userInteraction) {
           openModalNotification(hasNoteId);

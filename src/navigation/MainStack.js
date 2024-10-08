@@ -13,12 +13,7 @@ import {NewScreen} from '../screens/NewScreen';
 import {GalleryModal} from '../screens/GalleryModal';
 import {VideoModal} from '../screens/VideoModal';
 import {SearchNewsModal} from '../screens/SearchNewsModal';
-import {
-  Platform,
-  PermissionsAndroid,
-  PermissionStatus,
-  AppState,
-} from 'react-native';
+import {Platform, AppState} from 'react-native';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import PushNotification, {Importance} from 'react-native-push-notification';
 import {
@@ -83,6 +78,13 @@ const MainStack = () => {
     }
   };
 
+  const pushLocalNotification = notification => {
+    PushNotification.localNotification({
+      channelId: notification.channelId,
+      ...notification,
+    });
+  };
+
   const notificationConfiguration = () => {
     PushNotification.configure({
       onRegister: function (token) {
@@ -92,24 +94,40 @@ const MainStack = () => {
             typeDevice: token.os,
           }),
         )
-          .then(_response => {
-            // console.log({response});
-          })
+          .then()
           .catch(error => {
             console.log({error});
           });
-        // console.log('TOKEN:', token);
       },
       onNotification: function (notification) {
         let hasNoteId = hasNoteIdByDeviceType(notification, Platform.OS);
         let hasFinish = hasFinishByDeviceType(notification, Platform.OS);
 
+        if (Platform.OS == 'android' && AppState.currentState == 'active') {
+          PushNotification.channelExists(
+            notification.channelId,
+            function (exists) {
+              if (exists) {
+                pushLocalNotification(notification);
+              } else {
+                PushNotification.createChannel(
+                  {
+                    channelId: notification.channelId,
+                    channelName: notification.channelId,
+                    soundName: 'default',
+                    importance: Importance.HIGH,
+                    vibrate: true,
+                  },
+                  _created => pushLocalNotification(notification),
+                );
+              }
+            },
+          );
+        }
         if (notification.userInteraction) {
           openModalNotification(hasNoteId);
         }
-        // process the notification
 
-        // (required) Called when a remote is received or opened, or local notification is opened
         if (hasFinish != null) {
           notification.finish(PushNotificationIOS.FetchResult.NoData);
         }
@@ -134,7 +152,7 @@ const MainStack = () => {
   };
 
   const checkApplicationPermission = async () => {
-    checkNotifications().then(({status, _settings}) => {
+    await checkNotifications().then(({status, _settings}) => {
       // console.log({status});
       if (status == 'granted') {
         dispatch(setStatusNotificationPermission(status));

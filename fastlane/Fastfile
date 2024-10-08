@@ -159,8 +159,10 @@ platform :ios do
   end
 
   lane :deploy_to_testflight do |options|
+    connect_api_key
+    
     pilot(
-      username: ENV['IOS_USER_ID'],
+      # username: ENV['IOS_USER_ID'],
       app_identifier: ENV['IOS_APP_ID'],
       ipa: ENV['IOS_IPA_PATH'],
       distribute_external: false,

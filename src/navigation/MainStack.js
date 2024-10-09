@@ -45,18 +45,6 @@ const MainStack = () => {
 
   const dispatch = useDispatch();
 
-  const hasNoteIdByDeviceType = (notification, typeDevice) => {
-    switch (typeDevice) {
-      case 'ios':
-        return get(notification, 'data.aps.target-content-id', null);
-
-      case 'android':
-        return get(notification, 'data.note_id', null);
-      default:
-        return null;
-    }
-  };
-
   const hasFinishByDeviceType = (notification, typeDevice) => {
     switch (typeDevice) {
       case 'ios':
@@ -100,9 +88,9 @@ const MainStack = () => {
           });
       },
       onNotification: function (notification) {
-        let hasNoteId = hasNoteIdByDeviceType(notification, Platform.OS);
+        let hasNoteId = get(notification, 'data.note_id', null);
         let hasFinish = hasFinishByDeviceType(notification, Platform.OS);
-
+        console.log(notification);
         if (Platform.OS == 'android' && AppState.currentState == 'active') {
           PushNotification.channelExists(
             notification.channelId,
@@ -113,7 +101,7 @@ const MainStack = () => {
                 PushNotification.createChannel(
                   {
                     channelId: notification.channelId,
-                    channelName: notification.channelId,
+                    channelName: "Noticias",
                     soundName: 'default',
                     importance: Importance.HIGH,
                     vibrate: true,

@@ -90,7 +90,7 @@ const MainStack = () => {
       onNotification: function (notification) {
         let hasNoteId = get(notification, 'data.note_id', null);
         let hasFinish = hasFinishByDeviceType(notification, Platform.OS);
-        console.log(notification);
+        
         if (Platform.OS == 'android' && AppState.currentState == 'active') {
           PushNotification.channelExists(
             notification.channelId,
@@ -101,7 +101,7 @@ const MainStack = () => {
                 PushNotification.createChannel(
                   {
                     channelId: notification.channelId,
-                    channelName: "Noticias",
+                    channelName: 'Noticias',
                     soundName: 'default',
                     importance: Importance.HIGH,
                     vibrate: true,

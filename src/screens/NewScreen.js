@@ -55,7 +55,6 @@ export const NewScreen = ({navigation}) => {
           filter: {
             source_slug: currentNew.source.slug,
             publish_movil: true,
-            publish_date_movil: true,
             pagination: {
               size: '10',
               page: '1',
@@ -227,9 +226,9 @@ const CardView = props => {
       //   console.log(videoMetadata);
     }
   }, []);
-  const formatScheduleDate = date => {
+  const formatDate = date => {
     if (date !== '' && date != null) {
-      let format = 'dddd D MMMM yyyy, h:mm a';
+      let format = 'dddd D MMMM yyyy';
       moment.locale('es');
       return moment(date).format(format);
     } else {
@@ -327,7 +326,7 @@ const CardView = props => {
             paddingHorizontal={'$3'}
             paddingVertical={'$2'}
             fontStyle="italic">
-            {formatScheduleDate(note.publish_date)}
+            {formatDate(note.date)}
           </Text>
         </VStack>
 

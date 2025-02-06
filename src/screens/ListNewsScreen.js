@@ -35,7 +35,6 @@ export const ListNewsScreen = ({navigation}) => {
           addItems: addItems,
           filter: {
             publish_movil: true,
-            publish_date_movil: true,
             pagination: {
               size: '10',
               page: `${newPage}`,

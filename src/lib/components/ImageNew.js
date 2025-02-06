@@ -30,6 +30,7 @@ export const ImageNewComponent = props => {
     onPress = () => {},
   } = props;
 
+  const {_width, height} = useWindowDimensions();
   return (
     <Pressable onPress={onPress}>
       {url != '' ? (
@@ -41,13 +42,13 @@ export const ImageNewComponent = props => {
           onPress={onPress}
         />
       ) : (
-        <Box></Box>
+        <Box style={{height: height / 3, width: '100%'}} backgroundColor='$coolGray300' />
       )}
     </Pressable>
   );
 };
 const ImageComponentByType = props => {
-  const {width, height} = useWindowDimensions();
+  const {_width, height} = useWindowDimensions();
 
   const {
     url = '',
@@ -57,7 +58,7 @@ const ImageComponentByType = props => {
     onPress = () => {},
   } = props;
   return (
-    <Box>
+    <Box style={{height: height / 3, width: '100%'}} backgroundColor='$coolGray300'>
       {showVideoIcon ? (
         <ImageBackground
           source={{uri: url}}

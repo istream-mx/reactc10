@@ -64,8 +64,11 @@ end
 target 'reactNativeApp' do
   config = use_native_modules!
 
+
+
   use_react_native!(
     :path => config[:reactNativePath],
+
     # Enables Flipper.
     #
     # Note that if you have use_frameworks! enabled, Flipper will not work and
@@ -89,5 +92,6 @@ target 'reactNativeApp' do
       config[:reactNativePath],
       :mac_catalyst_enabled => false
     )
+   
   end
 end

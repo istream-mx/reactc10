@@ -43,9 +43,9 @@ export const CardNew = props => {
     }
   }, []);
 
-  const formatScheduleDate = date => {
+  const formatDate = date => {
     if (date !== '' && date != null) {
-      let format = 'dddd D MMMM yyyy, h:mm a';
+      let format = 'dddd D MMMM yyyy';
       moment.locale('es');
       return moment(date).format(format);
     } else {
@@ -152,7 +152,7 @@ export const CardNew = props => {
             paddingHorizontal={'$3'}
             paddingTop={'$1'}
             fontStyle="italic">
-            {formatScheduleDate(item.publish_date)}
+            {formatDate(item.date)}
           </Text>
           <HStack justifyContent="flex-end" paddingHorizontal={'$4'}>
             <Button onPress={shareNew} variant="link" size="xl">

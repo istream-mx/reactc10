@@ -219,10 +219,10 @@ const CardView = props => {
   const [videoMetadata, setVideoMetadata] = React.useState({});
 
   React.useEffect(() => {
-    let videos = get(note, 'videos', []);
-    if (videos.length > 0) {
-      let videoUrls = videos.map(v => youtube_parser(v.url));
-      fetchMetadataYoutube(videoUrls[0]);
+    let video = get(note, 'url_video', '');
+    if (video != '' && video != null) {
+      let videoUrls = youtube_parser(video);
+      fetchMetadataYoutube(videoUrls);
       //   console.log(videoMetadata);
     }
   }, []);
@@ -264,8 +264,8 @@ const CardView = props => {
     }
   };
   const hasVideo = () => {
-    let videos = get(note, 'videos', []);
-    if (videos.length > 0) {
+    let video = get(note, 'url_video', '');
+    if (video != '' && video != null) {
       return true;
     } else {
       return false;
@@ -339,23 +339,6 @@ const CardView = props => {
             onPress={onPressImageByHasVideo}
           />
         )}
-
-        {/* <FlatList
-          data={note.images}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({item, index}) => (
-            <Image
-              key={index}
-              source={{uri: item.url}}
-              alt="newImg"
-              width={width}
-              height={height / 3}
-              resizeMode="cover"
-            />
-          )}
-          keyExtractor={(_item, index) => `${index}-img`}
-        /> */}
 
         <Box paddingHorizontal={'$3'}>
           <RenderHtml

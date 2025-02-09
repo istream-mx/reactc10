@@ -28,30 +28,25 @@ export const ListNewsScreen = ({navigation}) => {
   const [handlingData, setHandlingData] = React.useState(true);
   const insets = useSafeAreaInsets();
 
-  const fetchData = React.useCallback(
-    async (addItems, newPage) => {
-      await dispatch(
-        fetchNews({
-          addItems: addItems,
-          filter: {
-            publish_movil: true,
-            pagination: {
-              size: '10',
-              page: `${newPage}`,
-            },
-          },
-        }),
-      )
-        .then(() => {
-          setPage(newPage);
-          setHandlingData(false);
-        })
-        .catch(error => {
-          setHandlingData(false);
-        });
-    },
-    [dispatch],
-  );
+  const fetchData = async (addItems, newPage) => {
+    await dispatch(
+      fetchNews({
+        addItems: addItems,
+        filter: {
+          publish_movil: true,
+          size_items: 10,
+          page: `${newPage}`,
+        },
+      }),
+    )
+      .then(() => {
+        setPage(newPage);
+        setHandlingData(false);
+      })
+      .catch(_error => {
+        setHandlingData(false);
+      });
+  };
 
   const loadMore = () => {
     let currentPage = page;

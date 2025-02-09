@@ -27,10 +27,10 @@ export const CardNew = props => {
   const [videoMetadata, setVideoMetadata] = React.useState({});
 
   React.useEffect(() => {
-    let videos = get(item, 'videos', []);
-    if (videos.length > 0) {
-      let videoUrls = videos.map(v => youtube_parser(v.url));
-      fetchMetadataYoutube(videoUrls[0]);
+    let video = get(item, 'url_video', '');
+    if (video != '' && video != null) {
+      let videoUrl = youtube_parser(video);
+      fetchMetadataYoutube(videoUrl);
     }
   }, []);
 
@@ -62,8 +62,8 @@ export const CardNew = props => {
     }
   };
   const hasVideo = () => {
-    let videos = get(item, 'videos', []);
-    if (videos.length > 0) {
+    let video = get(item, 'url_video', '');
+    if (video != '' && video != null) {
       return true;
     } else {
       return false;
@@ -85,9 +85,8 @@ export const CardNew = props => {
     }
   };
   const onPressImageByHasVideo = () => {
-    let images = get(item, 'images', []);
-    let videos = get(item, 'videos', []);
-    if (videos.length > 0) {
+    let video = get(item, 'url_video', '');
+    if (video != '' && video != null) {
       navigation.navigate('VideoModal', {video: videoMetadata});
     } else {
       onPress();

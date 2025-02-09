@@ -45,10 +45,8 @@ export const SearchNewsModal = ({navigation}) => {
           filter: {
             title: title,
             publish_movil: true,
-            pagination: {
-              size: '10',
-              page: `${newPage}`,
-            },
+            size_items: 10,
+            page: `${newPage}`,
           },
         }),
       )

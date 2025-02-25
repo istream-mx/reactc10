@@ -21,7 +21,9 @@ import PagerView from 'react-native-pager-view';
 import {get} from 'lodash';
 import moment from 'moment';
 import 'moment/locale/es';
+import IframeRenderer, {iframeModel} from '@native-html/iframe-plugin';
 import RenderHtml from 'react-native-render-html';
+import WebView from 'react-native-webview';
 import {ActivityIndicator, Share, useWindowDimensions} from 'react-native';
 import {ImageNew, ImageNewComponent} from '../lib/components/ImageNew';
 import {youtube_parser} from '../utils/common';
@@ -297,6 +299,14 @@ const CardView = props => {
     }
   };
 
+  const renderers = {
+    iframe: IframeRenderer,
+  };
+
+  const customHTMLElementModels = {
+    iframe: iframeModel,
+  };
+
   return (
     <VStack
       flex={1}
@@ -342,6 +352,9 @@ const CardView = props => {
 
         <Box paddingHorizontal={'$3'}>
           <RenderHtml
+            renderers={renderers}
+            WebView={WebView}
+            customHTMLElementModels={customHTMLElementModels}
             contentWidth={width}
             source={{html: `${note.body}`}}
             tagsStyles={tagsStyles}

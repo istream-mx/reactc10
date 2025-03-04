@@ -250,6 +250,7 @@ const CardView = props => {
     body: {
       fontSize: fontSizeTexts,
       color: 'black',
+      textAlign: 'justify',
     },
     p: {
       fontSize: fontSizeTexts,
@@ -358,6 +359,11 @@ const CardView = props => {
             contentWidth={width}
             source={{html: `${note.body}`}}
             tagsStyles={tagsStyles}
+            renderersProps={{
+              iframe: {
+                scalesPageToFit: true,
+              },
+            }}
           />
         </Box>
       </ScrollView>

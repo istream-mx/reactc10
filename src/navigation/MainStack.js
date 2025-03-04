@@ -27,6 +27,10 @@ import {
   requestNotifications,
 } from 'react-native-permissions';
 import {setStatusNotificationPermission} from '../app/reducers/persitStore';
+import {
+  getTrackingStatus,
+  requestTrackingPermission,
+} from 'react-native-tracking-transparency';
 
 const Stack = createNativeStackNavigator();
 
@@ -90,7 +94,7 @@ const MainStack = () => {
       onNotification: function (notification) {
         let hasNoteId = get(notification, 'data.note_id', null);
         let hasFinish = hasFinishByDeviceType(notification, Platform.OS);
-        
+
         if (Platform.OS == 'android' && AppState.currentState == 'active') {
           PushNotification.channelExists(
             notification.channelId,
@@ -165,6 +169,14 @@ const MainStack = () => {
     });
   };
 
+  const appTrankingIOSPermissions = async () => {
+    const trackingStatus = await getTrackingStatus();
+    if (trackingStatus === 'not-determined') {
+      // enable tracking features
+      requestTrackingPermission();
+    }
+  };
+
   React.useEffect(() => {
     const checkVersion = async () => {
       const res = await checkForUpdate();
@@ -173,6 +185,9 @@ const MainStack = () => {
     };
     checkVersion();
     checkApplicationPermission();
+    if (Platform.OS === 'ios') {
+      appTrankingIOSPermissions();
+    }
   }, [dispatch]);
 
   return (

@@ -53,5 +53,7 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Permitir el seguimiento para mostrar anuncios mas personalizados.</string>
 </dict>
 </plist>

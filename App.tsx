@@ -12,15 +12,8 @@ import {store, persistor} from './src/app/store';
 import {PersistGate} from 'redux-persist/integration/react';
 import {GluestackUIProvider} from '@gluestack-ui/themed';
 import MainStack from './src/navigation/MainStack';
-import SplashScreen from 'react-native-splash-screen';
-import {Platform} from 'react-native';
-const App = () => {
-  React.useEffect(() => {
-    if (Platform.OS === 'android') {
-      SplashScreen.hide();
-    }
-  }, []);
 
+const App = () => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>

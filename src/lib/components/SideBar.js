@@ -31,7 +31,9 @@ export const SideBar = ({navigation}) => {
 
   const navigateTo = (routeName, params = {}) => {
     if (routeName !== currentPath) {
-      navigation.navigate(routeName, params);
+      navigation.navigate('MainDrawer', {
+        screen: routeName,
+      });
       dispatch(setSideBarCurrent(routeName));
     }
   };

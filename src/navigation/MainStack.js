@@ -14,8 +14,8 @@ import {GalleryModal} from '../screens/GalleryModal';
 import {VideoModal} from '../screens/VideoModal';
 import {SearchNewsModal} from '../screens/SearchNewsModal';
 import {Platform, AppState} from 'react-native';
-import PushNotificationIOS from '@react-native-community/push-notification-ios';
-import PushNotification, {Importance} from 'react-native-push-notification';
+// import PushNotificationIOS from '@react-native-community/push-notification-ios';
+// import PushNotification, {Importance} from 'react-native-push-notification';
 import {
   registerTokenNotificationDevice,
   setIsNotificationMode,
@@ -35,7 +35,6 @@ import {
 const Stack = createNativeStackNavigator();
 
 const MainStack = () => {
-  const updateInfo = useSelector(state => state.updateInfoStore.updateInfo);
   const isNotificationMode = useSelector(
     state => state.pushNotificationStore.isNotificationMode,
   );
@@ -49,160 +48,144 @@ const MainStack = () => {
 
   const dispatch = useDispatch();
 
-  const hasFinishByDeviceType = (notification, typeDevice) => {
-    switch (typeDevice) {
-      case 'ios':
-        return get(notification, 'data.finish', null);
+  // const hasFinishByDeviceType = (notification, typeDevice) => {
+  //   switch (typeDevice) {
+  //     case 'ios':
+  //       return get(notification, 'data.finish', null);
 
-      case 'android':
-        return get(notification, 'finish', null);
-      default:
-        return null;
-    }
-  };
+  //     case 'android':
+  //       return get(notification, 'finish', null);
+  //     default:
+  //       return null;
+  //   }
+  // };
 
-  const openModalNotification = hasNoteId => {
-    if (hasNoteId != null) {
-      dispatch(setNewCurrentId(Number(hasNoteId)));
-      dispatch(setIsNotificationMode(true));
-    } else {
-      dispatch(setIsNotificationMode(false));
-    }
-  };
+  // const openModalNotification = hasNoteId => {
+  //   if (hasNoteId != null) {
+  //     dispatch(setNewCurrentId(Number(hasNoteId)));
+  //     dispatch(setIsNotificationMode(true));
+  //   } else {
+  //     dispatch(setIsNotificationMode(false));
+  //   }
+  // };
 
-  const pushLocalNotification = notification => {
-    PushNotification.localNotification({
-      channelId: notification.channelId,
-      ...notification,
-    });
-  };
+  // const pushLocalNotification = notification => {
+  //   PushNotification.localNotification({
+  //     channelId: notification.channelId,
+  //     ...notification,
+  //   });
+  // };
 
-  const notificationConfiguration = () => {
-    PushNotification.configure({
-      onRegister: function (token) {
-        dispatch(
-          registerTokenNotificationDevice({
-            tokenNotification: token.token,
-            typeDevice: token.os,
-          }),
-        )
-          .then()
-          .catch(error => {
-            console.log({error});
-          });
-      },
-      onNotification: function (notification) {
-        let hasNoteId = get(notification, 'data.note_id', null);
-        let hasFinish = hasFinishByDeviceType(notification, Platform.OS);
+  // const notificationConfiguration = () => {
+  //   PushNotification.configure({
+  //     onRegister: function (token) {
+  //       dispatch(
+  //         registerTokenNotificationDevice({
+  //           tokenNotification: token.token,
+  //           typeDevice: token.os,
+  //         }),
+  //       )
+  //         .then()
+  //         .catch(error => {
+  //           console.log({error});
+  //         });
+  //     },
+  //     onNotification: function (notification) {
+  //       let hasNoteId = get(notification, 'data.note_id', null);
+  //       let hasFinish = hasFinishByDeviceType(notification, Platform.OS);
 
-        if (Platform.OS == 'android' && AppState.currentState == 'active') {
-          PushNotification.channelExists(
-            notification.channelId,
-            function (exists) {
-              if (exists) {
-                pushLocalNotification(notification);
-              } else {
-                PushNotification.createChannel(
-                  {
-                    channelId: notification.channelId,
-                    channelName: 'Noticias',
-                    soundName: 'default',
-                    importance: Importance.HIGH,
-                    vibrate: true,
-                  },
-                  _created => pushLocalNotification(notification),
-                );
-              }
-            },
-          );
-        }
-        if (notification.userInteraction) {
-          openModalNotification(hasNoteId);
-        }
+  //       if (Platform.OS == 'android' && AppState.currentState == 'active') {
+  //         PushNotification.channelExists(
+  //           notification.channelId,
+  //           function (exists) {
+  //             if (exists) {
+  //               pushLocalNotification(notification);
+  //             } else {
+  //               PushNotification.createChannel(
+  //                 {
+  //                   channelId: notification.channelId,
+  //                   channelName: 'Noticias',
+  //                   soundName: 'default',
+  //                   importance: Importance.HIGH,
+  //                   vibrate: true,
+  //                 },
+  //                 _created => pushLocalNotification(notification),
+  //               );
+  //             }
+  //           },
+  //         );
+  //       }
+  //       if (notification.userInteraction) {
+  //         openModalNotification(hasNoteId);
+  //       }
 
-        if (hasFinish != null) {
-          notification.finish(PushNotificationIOS.FetchResult.NoData);
-        }
-      },
-      onAction: function (notification) {
-        console.log('ACTION:', notification.action);
-        console.log('NOTIFICATION:', notification);
+  //       if (hasFinish != null) {
+  //         notification.finish(PushNotificationIOS.FetchResult.NoData);
+  //       }
+  //     },
+  //     onAction: function (notification) {
+  //       console.log('ACTION:', notification.action);
+  //       console.log('NOTIFICATION:', notification);
 
-        // process the action
-      },
-      onRegistrationError: function (err) {
-        console.error(err.message, err);
-      },
-      permissions: {
-        alert: true,
-        badge: true,
-        sound: true,
-      },
-      popInitialNotification: true,
-      requestPermissions: true,
-    });
-  };
+  //       // process the action
+  //     },
+  //     onRegistrationError: function (err) {
+  //       console.error(err.message, err);
+  //     },
+  //     permissions: {
+  //       alert: true,
+  //       badge: true,
+  //       sound: true,
+  //     },
+  //     popInitialNotification: true,
+  //     requestPermissions: true,
+  //   });
+  // };
 
-  const checkApplicationPermission = async () => {
-    await checkNotifications().then(({status, _settings}) => {
-      // console.log({status});
-      if (status == 'granted') {
-        dispatch(setStatusNotificationPermission(status));
-        notificationConfiguration();
-      } else if (
-        status != 'granted' &&
-        localStatusNotifiactionPermission == null
-      ) {
-        requestNotifications(['alert', 'sound', 'badge']).then(
-          ({status, _settings}) => {
-            dispatch(setStatusNotificationPermission(status));
-            if (status == 'granted') {
-              notificationConfiguration();
-            }
-            // console.log({status});
-          },
-        );
-      } else {
-        dispatch(setStatusNotificationPermission(status));
-        console.log({status});
-      }
-    });
-  };
+  // const checkApplicationPermission = async () => {
+  //   await checkNotifications().then(({status, _settings}) => {
+  //     // console.log({status});
+  //     if (status == 'granted') {
+  //       dispatch(setStatusNotificationPermission(status));
+  //       notificationConfiguration();
+  //     } else if (
+  //       status != 'granted' &&
+  //       localStatusNotifiactionPermission == null
+  //     ) {
+  //       requestNotifications(['alert', 'sound', 'badge']).then(
+  //         ({status, _settings}) => {
+  //           dispatch(setStatusNotificationPermission(status));
+  //           if (status == 'granted') {
+  //             notificationConfiguration();
+  //           }
+  //           // console.log({status});
+  //         },
+  //       );
+  //     } else {
+  //       dispatch(setStatusNotificationPermission(status));
+  //       console.log({status});
+  //     }
+  //   });
+  // };
 
-  const appTrankingIOSPermissions = async () => {
-    const trackingStatus = await getTrackingStatus();
-    if (trackingStatus === 'not-determined') {
-      // enable tracking features
-      requestTrackingPermission();
-    }
-  };
+  // const appTrankingIOSPermissions = async () => {
+  //   const trackingStatus = await getTrackingStatus();
+  //   if (trackingStatus === 'not-determined') {
+  //     requestTrackingPermission();
+  //   }
+  // };
 
-  React.useEffect(() => {
-    const checkVersion = async () => {
-      const res = await checkForUpdate();
-      dispatch(setHasCheckForUpdate(true));
-      dispatch(setUpdateInfo(res));
-    };
-    checkVersion();
-    checkApplicationPermission();
-    if (Platform.OS === 'ios') {
-      appTrankingIOSPermissions();
-    }
-  }, [dispatch]);
+  // React.useEffect(() => {
+    
+  //   checkApplicationPermission();
+  //   if (Platform.OS === 'ios') {
+  //     appTrankingIOSPermissions();
+  //   }
+  // }, [dispatch]);
 
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{headerShown: false}}>
-        {hasCheckForUpdate && updateInfo.isNeeded ? (
-          <>
-            <Stack.Screen
-              name="UpdateAvailableScreen"
-              component={UpdateAvailableScreen}
-              initialParams={updateInfo}
-            />
-          </>
-        ) : (
-          <>
             {!isNotificationMode ? (
               <>
                 <Stack.Screen name="MainDrawer" component={MainDrawer} />
@@ -261,8 +244,6 @@ const MainStack = () => {
                 />
               </>
             )}
-          </>
-        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

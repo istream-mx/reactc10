@@ -1,7 +1,6 @@
 import {Box, Text, VStack} from '@gluestack-ui/themed';
 import Video, {VideoRef} from 'react-native-video';
 import {Dimensions, StyleSheet} from 'react-native';
-import VideoPlayer from 'react-native-video-controls';
 import * as React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {setIsFullScreenVideoPlayer} from '../../app/reducers/liveStreamStore';
@@ -57,8 +56,6 @@ export const Player = props => {
       onError={onError}
       controls={true}
       paused={!isFocused}
-      renderToHardwareTextureAndroid
-      shouldRasterizeIOS
     />
   );
 };

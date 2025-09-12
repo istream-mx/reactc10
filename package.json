@@ -44,7 +44,6 @@
     "react-native-svg": "^15.12.0",
     "react-native-tracking-transparency": "^0.1.2",
     "react-native-video": "^6.16.1",
-    "react-native-video-controls": "^2.8.1",
     "react-native-webview": "^13.11.1",
     "react-native-youtube-iframe": "^2.3.0",
     "react-redux": "^8.1.2",

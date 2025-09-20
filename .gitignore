@@ -70,7 +70,7 @@ yarn-error.log
 # testing
 /coverage
 android/app/google-services.json
-
+ios/GoogleService-Info.plist
 # Yarn
 .yarn/*
 !.yarn/patches

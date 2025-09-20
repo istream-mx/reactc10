@@ -4,19 +4,26 @@ import {LiveStreamModal} from '../screens/LiveStreamModal';
 import {SideBar} from '../lib/components/SideBar';
 import {MoreDetailsScreen} from '../screens/MoreDetailsScreen';
 import {ListNewsScreen} from '../screens/ListNewsScreen';
+import {Dimensions} from 'react-native';
 
 const Drawer = createDrawerNavigator();
 
 const MainDrawer = ({navigation}) => {
+  const renderSideBar = React.useCallback(
+    _props => <SideBar navigation={navigation} />,
+    [navigation],
+  );
+
   return (
     <Drawer.Navigator
       screenOptions={{
         drawerStyle: {
           backgroundColor: 'transparent',
         },
+        overlayColor: 'rgba(0,0,0,0.5)',
         drawerType: 'front',
       }}
-      drawerContent={_props => <SideBar navigation={navigation} />}
+      drawerContent={renderSideBar}
       initialRouteName="ListNewsScreen">
       <Drawer.Screen
         name="LiveStreamModal"

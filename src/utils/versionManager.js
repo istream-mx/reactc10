@@ -1,4 +1,4 @@
-import VersionCheck from 'react-native-version-check';
+// import VersionCheck from 'react-native-version-check';
 import {ENV} from '../environments';
 
 const DEFAULT_VERSION = {
@@ -12,8 +12,8 @@ export const checkForUpdate = async () => {
     if (ENV === 'development') {
       return DEFAULT_VERSION;
     }
-    const {isNeeded} = await VersionCheck.needUpdate();
-    return isNeeded;
+    // const {isNeeded} = await VersionCheck.needUpdate();
+    return DEFAULT_VERSION;
   } catch (error) {
     return DEFAULT_VERSION;
   }

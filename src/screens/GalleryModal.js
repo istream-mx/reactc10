@@ -1,8 +1,7 @@
 import {Box, Button, ButtonIcon, HStack} from '@gluestack-ui/themed';
 import {X} from 'lucide-react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-
-import Gallery from 'react-native-image-gallery';
+import ImageView from 'react-native-image-viewing';
 import * as React from 'react';
 
 export const GalleryModal = ({route, navigation}) => {
@@ -12,21 +11,27 @@ export const GalleryModal = ({route, navigation}) => {
   const listImages = React.useMemo(() => {
     return images.map((item, _index) => {
       return {
-        source: {
           uri: item.url,
-        },
       };
     });
   }, [images]);
 
+   const [visible, setIsVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsVisible(true);
+  }, []);
+
   return (
     <Box flex={1} backgroundColor="$black" pt={insets.top || '$2'}>
-      <HStack justifyContent="flex-start" padding={'$3'}>
-        <Button onPress={() => navigation.goBack()} variant="link">
-          <ButtonIcon as={X} color="$white" p={'$4'} />
-        </Button>
-      </HStack>
-      <Gallery images={listImages} />
+       <ImageView
+        images={listImages}
+        visible={visible}
+        onRequestClose={() => {
+          setIsVisible(false);
+          navigation.goBack();
+        }}
+      />
     </Box>
   );
 };

@@ -16,7 +16,7 @@ import {
   TvIcon,
 } from 'lucide-react-native';
 import * as React from 'react';
-import {Linking, Pressable, TouchableHighlight} from 'react-native';
+import {Dimensions, Linking, Pressable, TouchableHighlight} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {setSideBarCurrent} from '../../app/reducers/sideBarPathStore';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
@@ -31,10 +31,15 @@ export const SideBar = ({navigation}) => {
 
   const navigateTo = (routeName, params = {}) => {
     if (routeName !== currentPath) {
-      navigation.navigate(routeName, params);
+      navigation.navigate('MainDrawer', {
+        screen: routeName,
+      });
       dispatch(setSideBarCurrent(routeName));
     }
   };
+  const {width} = Dimensions.get('window');
+  const imageWidth = width * 0.35;
+
   return (
     <VStack
       flex={1}
@@ -47,10 +52,8 @@ export const SideBar = ({navigation}) => {
         borderBottomColor="$white"
         borderBottomWidth={1}>
         <Image
-          padding={'$16'}
           source={require('../../ui-images/Logo_app.png')}
-          alt="logo"
-          size="md"
+          style={{width: imageWidth, height: imageWidth, resizeMode: 'contain'}}
         />
       </VStack>
       <ScrollView paddingVertical={20}>

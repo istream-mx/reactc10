@@ -24,29 +24,35 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+
+	<!-- 🔹 Bloque de App Transport Security correctamente cerrado -->
 	<key>NSAppTransportSecurity</key>
 	<dict>
-	<key>NSAllowsArbitraryLoads</key>
-	<false/>
-	<key>NSAllowsLocalNetworking</key>
-	<true/>
-	<key>NSExceptionDomains</key>
-	<dict>
-		<key>stream2.dynalias.com</key>
-		<dict>
-		<key>NSIncludesSubdomains</key>
-		<true/>
-		<key>NSExceptionAllowsInsecureHTTPLoads</key>
-		<true/>
-		<key>NSExceptionRequiresForwardSecrecy</key>
+		<key>NSAllowsArbitraryLoads</key>
 		<false/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>stream2.dynalias.com</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSExceptionRequiresForwardSecrecy</key>
+				<false/>
+			</dict>
 		</dict>
 	</dict>
-</dict>
+
+	<!-- 🔹 Estas claves deben ir FUERA de NSAppTransportSecurity -->
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+
 	<key>NSUserTrackingUsageDescription</key>
-	<string>Permitir el seguimiento para mostrar anuncios mas personalizados.</string>
+	<string>Permitir el seguimiento para mostrar anuncios más personalizados.</string>
+
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

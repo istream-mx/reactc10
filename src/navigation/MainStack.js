@@ -57,6 +57,14 @@ const MainStack = () => {
     }
   };
 
+   const appTrankingIOSPermissions = async () => {
+    const trackingStatus = await getTrackingStatus();
+    if (trackingStatus === 'not-determined') {
+      // enable tracking features
+      requestTrackingPermission();
+    }
+  };
+
   React.useEffect(() => {
     const unsubscribeBackGround = messaging().onNotificationOpenedApp(
       async remoteMessage => {
@@ -65,6 +73,10 @@ const MainStack = () => {
         openModalNotification(hasNoteId);
       },
     );
+
+    if (Platform.OS === 'ios') {
+      appTrankingIOSPermissions();
+    }
 
     requestPermissionsByPlatform().then(enabled => {
       if (enabled) {

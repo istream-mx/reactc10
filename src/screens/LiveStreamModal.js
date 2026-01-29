@@ -8,10 +8,15 @@ import {
   fetchScheduleEvents,
 } from '../app/reducers/liveStreamStore';
 import {ListScheduleEvents} from '../lib/components/ListScheduleEvents';
-import {StatusBar} from 'react-native';
+import {ActivityIndicator, StatusBar, TouchableOpacity} from 'react-native';
+import {CloudflareStreamPlayer} from '../lib/components/CloudflareStreamPlayer';
 
 export const LiveStreamModal = ({navigation}) => {
   const liveStreams = useSelector(state => state.liveStreamStore.liveStreams);
+  const [isLoadingSchedules, setIsloadingSchedules] = React.useState(false);
+  const [isLoadingLive, setIsloadingLive] = React.useState(false);
+  const [isLoading, setIsloading] = React.useState(true);
+
   const scheduleEvents = useSelector(
     state => state.liveStreamStore.scheduleEvents,
   );
@@ -30,8 +35,18 @@ export const LiveStreamModal = ({navigation}) => {
     }
   }, [liveStreams]);
 
+  const retryLive = () => {
+    setIsloadingLive(true);
+    dispatch(fetchLiveStream()).finally(() => setIsloadingLive(false));
+  };
+  const retrySchedule = () => {
+    setIsloadingSchedules(true);
+    dispatch(fetchScheduleEvents()).finally(() => setIsloadingSchedules(false));
+  };
+
   React.useEffect(() => {
-    dispatch(fetchLiveStream());
+    setIsloading(true);
+    dispatch(fetchLiveStream()).finally(() => setIsloading(false));
     dispatch(fetchScheduleEvents());
   }, [dispatch]);
 
@@ -43,10 +58,50 @@ export const LiveStreamModal = ({navigation}) => {
         <StatusBar hidden={true} />
       )}
       <VStack justifyContent="center" flex={1} backgroundColor="$black">
-        {liveStream?.url && <Player url={liveStream.url} />}
+        {liveStream?.url ? (
+          <CloudflareStreamPlayer
+            videoUrl={liveStream.url || ''}
+            maxRetries={5}
+            retryDelay={2000}
+          />
+        ) : (
+          <VStack>
+            {isLoading ? (
+              <ActivityIndicator size="large" color="#fff" />
+            ) : (
+              <TouchableOpacity
+                style={{
+                  borderColor: '#fff',
+                  borderWidth: 1,
+                  alignSelf: 'center',
+                  paddingHorizontal: 30,
+                  paddingVertical: 12,
+                  borderRadius: 8,
+                }}
+                onPress={retryLive}>
+                {isLoadingLive ? (
+                  <ActivityIndicator size="large" color="#fff" />
+                ) : (
+                  <Text
+                    style={{
+                      color: '#fff',
+                      fontSize: 16,
+                      fontWeight: '600',
+                    }}>
+                    Reintentar
+                  </Text>
+                )}
+              </TouchableOpacity>
+            )}
+          </VStack>
+        )}
       </VStack>
       {!isFullScreenVideoPlayer && (
-        <ListScheduleEvents scheduleEvents={scheduleEvents} />
+        <ListScheduleEvents
+          scheduleEvents={scheduleEvents}
+          isLoadingSchedules={isLoadingSchedules}
+          onPressRefresh={retrySchedule}
+        />
       )}
     </Box>
   );

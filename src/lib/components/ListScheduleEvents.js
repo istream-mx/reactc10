@@ -12,7 +12,11 @@ import * as React from 'react';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
 export const ListScheduleEvents = props => {
-  const {scheduleEvents = []} = props;
+  const {
+    scheduleEvents = [],
+    isLoadingSchedules = false,
+    onPressRefresh = () => {},
+  } = props;
   const insets = useSafeAreaInsets();
 
   const firstItem = React.useMemo(() => {
@@ -61,6 +65,8 @@ export const ListScheduleEvents = props => {
       </HStack>
       <FlatList
         data={filterScheduleList}
+        refreshing={isLoadingSchedules}
+        onRefresh={onPressRefresh}
         contentContainerStyle={{
           flexGrow: 1,
           justifyContent: 'center',

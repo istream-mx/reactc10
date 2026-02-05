@@ -33,6 +33,7 @@ export const CloudflareStreamPlayer = props => {
   const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
   const retryCountRef = React.useRef(0);
+  const [showButtons, setShowButtons] = React.useState(false);
 
   // Monitorear estado de la red
   React.useEffect(() => {
@@ -81,6 +82,7 @@ export const CloudflareStreamPlayer = props => {
   // Manejar errores
   const onError = React.useCallback(
     err => {
+      setPaused(true);
       console.log('Error de video:', err);
       setError(err);
       // Guardar tiempo actual antes de reintentar
@@ -146,7 +148,7 @@ export const CloudflareStreamPlayer = props => {
 
   // Renderizar indicador de buffering/reconexión
   const renderLoadingOverlay = () => {
-    if (error) {
+    if (error && paused) {
       return (
         <View style={styles.loadingOverlayRetry}>
           <TouchableOpacity
@@ -169,13 +171,65 @@ export const CloudflareStreamPlayer = props => {
     return null;
   };
 
+  // Renderizar indicador de buffering/reconexión
+  const renderButtonsOverlay = () => {
+    return (
+      <Pressable
+        onPress={() => {
+          setShowButtons(!showButtons);
+        }}
+        style={{
+          ...styles.buttonsOverlay,
+          ...{
+            backgroundColor: showButtons ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0)',
+          },
+        }}>
+        <View style={styles.buttonControls}>
+          {renderLoadingOverlay()}
+          <View
+            style={{
+              ...styles.fullscreenButton,
+              ...{paddingBottom: fullscreen ? insets.bottom : 0},
+            }}>
+            {showButtons && (
+              <TouchableOpacity
+                onPress={toggleFullscreen}
+                style={{
+                  backgroundColor: 'rgba(0,0,0,0.6)',
+                  padding: 10,
+                  borderRadius: 10,
+                }}>
+                {fullscreen ? (
+                  <Icon as={MinimizeIcon} color="$white" />
+                ) : (
+                  <Icon as={MaximizeIcon} color="$white" />
+                )}
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+      </Pressable>
+    );
+  };
+
   const toggleFullscreen = () => {
     setFullscreen(prev => !prev);
     dispatch(setIsFullScreenVideoPlayer(!fullscreen));
   };
 
+  React.useEffect(() => {
+    if (isFocused && paused && error == null) {
+      setPaused(false);
+    }
+  }, [isFocused, paused, error]);
+
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      onPress={() => {
+        console.log('Buttons', showButtons);
+        setShowButtons(showButtons);
+      }}>
       <Video
         key={playerKey}
         ref={videoRef}
@@ -184,7 +238,7 @@ export const CloudflareStreamPlayer = props => {
           type: 'm3u8',
         }}
         style={styles.video}
-        paused={!isFocused}
+        paused={!isFocused || paused}
         onLoad={onLoad}
         onProgress={onProgress}
         onBuffer={onBuffer}
@@ -206,28 +260,8 @@ export const CloudflareStreamPlayer = props => {
         playWhenInactive={true}
         ignoreSilentSwitch="ignore"
       />
-      {
-        <View
-          style={{
-            ...styles.fullscreenButton,
-            ...{paddingBottom: fullscreen ? insets.bottom : 0},
-          }}>
-          <TouchableOpacity
-            onPress={toggleFullscreen}
-            style={{
-              backgroundColor: 'rgba(0,0,0,0.6)',
-              padding: 10,
-              borderRadius: 10,
-            }}>
-            {fullscreen ? (
-              <Icon as={MinimizeIcon} color="$white" />
-            ) : (
-              <Icon as={MaximizeIcon} color="$white" />
-            )}
-          </TouchableOpacity>
-        </View>
-      }
-      {renderLoadingOverlay()}
+      {renderButtonsOverlay()}
+      {/* {renderLoadingOverlay()} */}
       {/* {renderErrorOverlay()} */}
     </View>
   );
@@ -242,6 +276,9 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#000',
     zIndex: 10,
+  },
+  buttonControls: {
+    ...StyleSheet.absoluteFillObject,
   },
   fullscreenButton: {
     position: 'absolute',
@@ -275,6 +312,9 @@ const styles = StyleSheet.create({
     color: '#fff',
     marginTop: 10,
     fontSize: 14,
+  },
+  buttonsOverlay: {
+    ...StyleSheet.absoluteFillObject,
   },
   errorOverlay: {
     ...StyleSheet.absoluteFillObject,
